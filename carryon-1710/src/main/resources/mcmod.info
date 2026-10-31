@@ -1,0 +1,16 @@
+[
+{
+  "modid": "carryon",
+  "name": "Carry On",
+  "description": "Pick up blocks, tile entities and mobs with your bare hands and carry them around. 1.7.10 port, powered by BackportAPI Lib.",
+  "version": "1.0.0",
+  "mcversion": "1.7.10",
+  "url": "https://github.com/Tschipp/CarryOn",
+  "updateUrl": "",
+  "authorList": ["Tschipp"],
+  "credits": "Ported to 1.7.10 with BackportAPI Lib",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": ["backportapi"]
+}
+]

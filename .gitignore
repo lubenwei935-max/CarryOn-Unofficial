@@ -1,0 +1,19 @@
+# ---- 编译依赖（Minecraft / Forge / MCP 的 jar，约 32MB）----
+# 属于 Mojang / Forge 的再分发受限产物，且体积大，不入库。
+# 具体清单和获取方式见 README 的「准备依赖」一节。
+deps/
+
+# ---- 构建产物 ----
+build/
+*.jar
+*.jar.bak
+
+# ---- 工作区 / 工具 ----
+.workbuddy-ai/
+*.log
+
+# ---- 移植分析用的参考材料 ----
+# 含上游仓库 clone、Forge/MCP 的 jar 与解包产物，体积约 24MB。
+# 只保留分析报告本身。
+port-analysis/*
+!port-analysis/CarryOn-1.7.10-移植分析.md

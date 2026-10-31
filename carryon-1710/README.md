@@ -1,13 +1,19 @@
-# Carry On — 1.7.10 移植版
+# CarryOn-Unofficial — 1.7.10 移植版
 
 上游：Tschipp / CarryOn，1.10 分支 v1.9.1
 移植：基于 **BackportAPI Lib**（提供 BlockPos / IBlockState / EnumHand / GlStateManager / Capability / @Config）
 
-- **modid**: `carryon`
+- **modid**: `carryonunoffical`
 - **版本**: 1.0.0
 - **MC**: 1.7.10
 - **硬前置**: Forge 1.7.10 + **BackportAPI Lib**
 - **软前置**: Backhand（提供副手，可选）
+
+> **modid 与早期版本不同**：以前用的是 `carryon`（与上游同名），现在改为 `carryonunoffical`。
+> 连带变化：配置文件 `config/carryonunoffical.cfg`、资源域 `assets/carryonunoffical/`、
+> 能力键 `carryonunoffical:position`。
+> 首次启动会把旧的 `carryon.cfg` **复制**过去（旧文件保留，方便回退），参数不会丢。
+> 命令名仍是 `/carryon`，脚本目录仍是 `config/carryon-scripts/`，这两处没有跟着改。
 
 ---
 

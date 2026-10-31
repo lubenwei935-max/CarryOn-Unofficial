@@ -47,7 +47,7 @@ public class ItemEntity extends Item
 	public ItemEntity()
 	{
 		this.setUnlocalizedName("entity_item");
-		this.setTextureName("carryon:tile");
+		this.setTextureName(CarryOn.MODID + ":tile");
 		GameRegistry.registerItem(this, "entity_item");
 		this.setMaxStackSize(1);
 	}
@@ -56,7 +56,7 @@ public class ItemEntity extends Item
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register)
 	{
-		this.itemIcon = register.registerIcon("carryon:tile");
+		this.itemIcon = register.registerIcon(CarryOn.MODID + ":tile");
 	}
 
 	@Override

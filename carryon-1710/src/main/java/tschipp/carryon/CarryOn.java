@@ -41,12 +41,19 @@ public class CarryOn
 	@Instance(CarryOn.MODID)
 	public static CarryOn instance;
 
-	public static final String MODID = "carryon";
+	/**
+	 * modid 用 {@code carryonunoffical}（与 mcmod.info 一致）。
+	 *
+	 * <p>它同时决定：配置文件路径 {@code config/carryonunoffical.cfg}、
+	 * 资源域 {@code assets/carryonunoffical/}、能力键 {@code carryonunoffical:position}。
+	 * 从旧版（modid = {@code carryon}）升级时，{@code CommonProxy} 会把旧配置文件搬过来。
+	 */
+	public static final String MODID = "carryonunoffical";
 
 	/** 移植版自己的版本号，与 mcmod.info 保持一致（上游是 1.9.1）。 */
 	public static final String VERSION = "1.0.0";
 
-	public static final String NAME = "Carry On";
+	public static final String NAME = "CarryOn-Unofficial";
 	public static final String ACCEPTED_VERSIONS = "[1.7.10]";
 
 	/**

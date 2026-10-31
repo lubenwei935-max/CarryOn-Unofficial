@@ -61,7 +61,7 @@ public class ItemTile extends Item
 	public ItemTile()
 	{
 		this.setUnlocalizedName("tile_item");
-		this.setTextureName("carryon:tile");
+		this.setTextureName(CarryOn.MODID + ":tile");
 		GameRegistry.registerItem(this, "tile_item");
 		this.setMaxStackSize(1);
 	}
@@ -70,7 +70,7 @@ public class ItemTile extends Item
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register)
 	{
-		this.itemIcon = register.registerIcon("carryon:tile");
+		this.itemIcon = register.registerIcon(CarryOn.MODID + ":tile");
 	}
 
 	@Override

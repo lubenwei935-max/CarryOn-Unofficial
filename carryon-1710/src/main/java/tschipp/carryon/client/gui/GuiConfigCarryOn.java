@@ -24,7 +24,7 @@ public class GuiConfigCarryOn extends GuiConfig
 
 	public GuiConfigCarryOn(GuiScreen parent)
 	{
-		super(parent, getConfigElements(), CarryOn.MODID, false, false, "Carry On Configuration");
+		super(parent, getConfigElements(), CarryOn.MODID, false, false, "CarryOn-Unofficial Configuration");
 	}
 
 	private static List<IConfigElement> getConfigElements()

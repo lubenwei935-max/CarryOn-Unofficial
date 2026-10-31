@@ -114,4 +114,4 @@ SpecialSource 在 srg 里查不到映射时会**静默跳过**——编译通过
 ## 致谢
 
 - [Tschipp](https://github.com/Tschipp/CarryOn) —— 上游 Carry On，本项目的全部玩法与大部分逻辑来自它
-- [Backhand](https://modrinth.com/mod/backhand) —— 1.7.10 的副手实现，BackportAPI 通过反射软接入
+- [Backhand-GTNH](https://github.com/GTNewHorizons/Backhand) —— 1.7.10 的副手实现，BackportAPI 通过反射软接入

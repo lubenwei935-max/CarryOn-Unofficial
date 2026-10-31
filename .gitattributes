@@ -1,0 +1,8 @@
+# 统一换行符，避免 Windows 上 clone 后 .sh 变成 CRLF 导致 bash 报错
+* text=auto eol=lf
+
+# 二进制
+*.png binary
+*.jar binary
+*.srg binary
+*.map binary

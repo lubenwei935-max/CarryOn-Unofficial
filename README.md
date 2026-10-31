@@ -1,6 +1,6 @@
 # CarryOn-Unofficial
 
-**Carry On（搬运）模组的 Minecraft 1.7.10 非官方移植**，以及它依赖的前置库 **BackportAPI Lib**。
+**Carry On（搬运）模组的 Minecraft 1.7.10 非官方移植**，以及它依赖的前置库 **BackportAPI**。
 
 上游是 [Tschipp/CarryOn](https://github.com/Tschipp/CarryOn) 的 1.10 分支 v1.9.1（LGPL-3.0）。
 本仓库把整套逻辑搬回 1.7.10，并额外沉淀出一套「把 1.8+ API 回填到 1.7.10」的兼容库——
@@ -9,11 +9,11 @@
 | 模块 | 说明 | 产物 |
 |---|---|---|
 | `backportapi/` | 1.8+ API 回填库：`BlockPos` / `IBlockState` / `EnumHand` / `GlStateManager` / `Capability` / `@Config` / `RenderTarget` … | `backportapi-1.0.0.jar` |
-| `carryon-1710/` | Carry On 本体（搬运方块与生物） | `carryon-1.0.0.jar` |
+| `CarryOn-Unofficial/` | Carry On 本体（搬运方块与生物） | `carryon-1.0.0.jar` |
 | `port-analysis/` | 移植前的可行性分析报告 | — |
 
 - **MC**：1.7.10
-- **前置**：Forge 10.13.4.1614 + BackportAPI Lib（Backhand 提供副手，可选）
+- **前置**：Forge 10.13.4.1614 + BackportAPI（Backhand 提供副手，可选）
 - **许可证**：LGPL-3.0（衍生自上游 Carry On）
 
 ---
@@ -37,7 +37,7 @@ backportapi/
   src/main/java/net/minecraft/…      按原包名重建的 1.8 类型
   build.sh  build.ps1                构建脚本（无 ForgeGradle）
   conf/                              重混淆用的 MCP 映射表
-carryon-1710/
+CarryOn-Unofficial/
   src/main/java/tschipp/carryon/     Carry On 本体
   src/main/resources/                语言文件 / 贴图 / mcmod.info
   build.sh                           构建脚本
@@ -59,7 +59,7 @@ javac（MCP 名）→ jar → SpecialSource 重混淆（mcp2srg）→ 打包
 export JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot"
 
 cd backportapi  && ./build.sh 1.0.0     # 产物 build/backportapi-1.0.0.jar
-cd ../carryon-1710
+cd ../CarryOn-Unofficial
 cp ../backportapi/build/backportapi-1.0.0.jar deps/   # 模组编译期要引用前置
 ./build.sh 1.0.0                        # 产物 build/carryon-1.0.0.jar
 ./verify.sh build/carryon-1.0.0.jar     # 必跑，见下
@@ -68,7 +68,7 @@ cp ../backportapi/build/backportapi-1.0.0.jar deps/   # 模组编译期要引用
 ### 准备依赖
 
 `deps/` 不入库（约 32MB，且是 Mojang / Forge 的再分发受限产物），需要自己放进去。
-两个工程各有一个 `deps/`，内容相同；`carryon-1710/deps/` 额外需要上一节构建出的 `backportapi-1.0.0.jar`。
+两个工程各有一个 `deps/`，内容相同；`CarryOn-Unofficial/deps/` 额外需要上一节构建出的 `backportapi-1.0.0.jar`。
 
 | 文件 | 来源 |
 |---|---|

@@ -2,13 +2,13 @@
 {
   "modid": "carryonunoffical",
   "name": "CarryOn-Unofficial",
-  "description": "Pick up blocks, tile entities and mobs with your bare hands and carry them around. 1.7.10 port, powered by BackportAPI Lib.",
+  "description": "Pick up blocks, tile entities and mobs with your bare hands and carry them around. 1.7.10 port, powered by BackportAPI.",
   "version": "1.0.0",
   "mcversion": "1.7.10",
   "url": "https://github.com/lubenwei935-max/CarryOn-Unofficial",
   "updateUrl": "",
   "authorList": ["Tschipp", "Mr.Chang"],
-  "credits": "Ported to 1.7.10 with BackportAPI Lib",
+  "credits": "Ported to 1.7.10 with BackportAPI",
   "logoFile": "",
   "screenshots": [],
   "dependencies": ["backportapi"]

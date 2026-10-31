@@ -1,12 +1,12 @@
 # CarryOn-Unofficial — 1.7.10 移植版
 
 上游：Tschipp / CarryOn，1.10 分支 v1.9.1
-移植：基于 **BackportAPI Lib**（提供 BlockPos / IBlockState / EnumHand / GlStateManager / Capability / @Config）
+移植：基于 **BackportAPI**（提供 BlockPos / IBlockState / EnumHand / GlStateManager / Capability / @Config）
 
 - **modid**: `carryonunoffical`
 - **版本**: 1.0.0
 - **MC**: 1.7.10
-- **硬前置**: Forge 1.7.10 + **BackportAPI Lib**
+- **硬前置**: Forge 1.7.10 + **BackportAPI**
 - **软前置**: Backhand（提供副手，可选）
 
 > **modid 与早期版本不同**：以前用的是 `carryon`（与上游同名），现在改为 `carryonunoffical`。
@@ -468,7 +468,7 @@ export JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot"
 # 产物: build/carryon-1.0.0.jar
 ```
 
-依赖 `deps/backportapi-1.0.0.jar`（编译期）。运行期需要 mods 目录里同时存在 BackportAPI Lib。
+依赖 `deps/backportapi-1.0.0.jar`（编译期）。运行期需要 mods 目录里同时存在 BackportAPI。
 
 ---
 

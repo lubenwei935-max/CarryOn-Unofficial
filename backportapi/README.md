@@ -1,4 +1,4 @@
-# BackportAPI Lib
+# BackportAPI
 
 把 Minecraft **1.8+ 的一批 API 回填到 1.7.10** 的兼容库，用于把 1.8/1.9 时代的模组移植回 1.7.10。
 
@@ -6,7 +6,7 @@
 - **版本**: 1.0.0
 - **MC**: 1.7.10
 - **硬前置**: 仅 Forge（10.13.4.1614 验证通过）
-- **软前置**: [Backhand](https://modrinth.com/mod/backhand)（提供副手，可选）
+- **软前置**: [Backhand-GTNH](https://github.com/GTNewHorizons/Backhand)（提供副手，可选）
 
 ---
 

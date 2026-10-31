@@ -1,4 +1,4 @@
-# BackportAPI Lib - ForgeGradle-free build pipeline
+# BackportAPI - ForgeGradle-free build pipeline
 #   1. javac (MCP names)                                    -> build/classes
 #   2. jar                                                  -> build/classes-mcp.jar
 #   3. SpecialSource reobf (mcp2srg + inheritance)          -> build/classes-srg.jar

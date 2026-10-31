@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# BackportAPI Lib - ForgeGradle-free build pipeline (bash / Git Bash)
+# BackportAPI - ForgeGradle-free build pipeline (bash / Git Bash)
 #
 #   1. javac (MCP names)                            -> build/classes
 #   2. jar                                          -> build/classes-mcp.jar

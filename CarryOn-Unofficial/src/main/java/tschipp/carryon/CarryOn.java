@@ -21,7 +21,7 @@ import tschipp.carryon.common.command.CommandCarryOnReload;
  * Carry On —— 把方块和生物搬起来带着走。
  *
  * <p>本文件是 <b>1.7.10 移植版</b>，基于上游 1.10 分支 v1.9.1。
- * 移植依赖 <b>BackportAPI Lib</b>（提供 BlockPos / IBlockState / EnumHand /
+ * 移植依赖 <b>BackportAPI</b>（提供 BlockPos / IBlockState / EnumHand /
  * GlStateManager / Capability / @Config 等 1.8+ API）。
  *
  * <p>与上游的差异：

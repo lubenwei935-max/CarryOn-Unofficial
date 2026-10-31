@@ -15,7 +15,7 @@ import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 /**
- * BackportAPI Lib —— 把 1.8+ 的一批 API 回填到 Minecraft 1.7.10 的兼容库。
+ * BackportAPI —— 把 1.8+ 的一批 API 回填到 Minecraft 1.7.10 的兼容库。
  *
  * <h3>它解决什么</h3>
  * 把 1.8/1.9 时代的模组移植回 1.7.10 时，最大的阻力不是逻辑，而是
@@ -47,8 +47,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 public class BackportAPI
 {
 	public static final String MODID = "backportapi";
-	public static final String NAME = "BackportAPI Lib";
-	public static final String VERSION = "1.0.3";
+	public static final String NAME = "BackportAPI";
+	public static final String VERSION = "1.0.0";
 	public static final String ACCEPTED_VERSIONS = "[1.7.10]";
 
 	@Mod.Instance(BackportAPI.MODID)
@@ -74,7 +74,7 @@ public class BackportAPI
 		// 主线程任务队列
 		Scheduling.init();
 
-		LOGGER.info("BackportAPI Lib " + VERSION + " initialized");
+		LOGGER.info("BackportAPI " + VERSION + " initialized");
 	}
 
 	/**

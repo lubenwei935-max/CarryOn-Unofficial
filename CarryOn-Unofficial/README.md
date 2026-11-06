@@ -4,7 +4,7 @@
 移植：基于 **BackportAPI**（提供 BlockPos / IBlockState / EnumHand / GlStateManager / Capability / @Config）
 
 - **modid**: `carryonunoffical`
-- **版本**: 1.0.0
+- **版本**: 1.0.1
 - **MC**: 1.7.10
 - **硬前置**: Forge 1.7.10 + **BackportAPI**
 - **软前置**: Backhand（提供副手，可选）
@@ -14,14 +14,31 @@
 > 能力键 `carryonunoffical:position`。
 > 首次启动会把旧的 `carryon.cfg` **复制**过去（旧文件保留，方便回退），参数不会丢。
 > 命令名仍是 `/carryon`，脚本目录仍是 `config/carryon-scripts/`，这两处没有跟着改。
+>
+> **升级时务必删掉旧 jar**。FML 是按每个 jar 自己的 `@Mod` 字节码建 mod 容器的，
+> 两个 jar 就会有两个容器（`carryon` 与 `carryonunoffical`）；但 1.7.10 所有模组共用
+> 同一个 LaunchClassLoader，两边跑的是**同一份类**。于是 `init` 会走两遍，
+> 第二次注册直接撞车：
+>
+> ```
+> java.lang.IllegalStateException: Capability already registered:
+>     tschipp.carryon.common.capabilities.IPosition
+> 	at net.minecraftforge.common.capabilities.CapabilityManager.register(...)
+> 	at tschipp.carryon.common.handler.RegistrationHandler.regCaps(...)
+> ```
+>
+> 更麻烦的是类路径里哪个 jar 先被加载并不固定：本次实测是**旧 jar 的类**赢了，
+> 所以新 jar 放进 mods 也不会生效。现在 `CarryOn` 的生命周期带一次性守卫
+> （后到的容器只打一行 ERROR 就跳过），`regCaps` 也做成幂等，重复装载不再崩溃；
+> 但正确做法仍是 `mods/` 里只留一个 jar。
 
 ---
 
 ## 玩法
 
-空手（主手）按 **Shift + 右键** 搬起方块或生物，再次右键放下。
+空手（主手）**潜行 + 右键** 搬起方块或生物，松开潜行后再右键放下。
 
-- 搬运中无法攻击、挖掘、丢弃、切换物品栏、打开容器
+- 搬运中无法攻击、挖掘、丢弃、切换物品栏、打开背包、打开容器
 - 搬运物越重（NBT 越大 / 体型越大）移动越慢
 - 生物可以叠在别的生物背上
 
@@ -126,7 +143,7 @@ world.setBlockMetadataWithNotify(x, y, z, i1, 3);    // 无条件写
 | 方块搬运（含 TileEntity NBT） | ✅ 完整 | 状态用 `Block + meta` 存，TE 走 `writeToNBT` |
 | 生物搬运 | ✅ 完整 | `EntityList.createEntityByName` 重建 |
 | 朝向自动旋转 | ✅ 可用 | 走 `BackportAPI` 的 `BlockRotation`（meta 位段表） |
-| Shift 键同步 | ✅ 完整 | 客户端 tick → 网络包 → 服务端 NBT |
+| 潜行触发搬起 | ✅ 完整 | 服务端 `player.isSneaking()`，无自定义按键 |
 | 配置（21 项 + 黑白名单） | ✅ 完整 | `@Config` + `Configuration` |
 | 配置 GUI | ✅ 完整 | `GuiConfig` + 三个分类 |
 | 命令 `/carryon clear|debug`、`/reloadscripts` | ✅ 完整 | 1.7.10 的 `processCommand` |
@@ -341,16 +358,33 @@ quark:custom_chest{type:"spruce"}->quark:custom_chest;0
 都必须存在且相等，candidate 多余的键不影响结果——等价于 1.8 的
 `NBTUtil.areNBTEquals`。
 
-### 顺带修好的另一个问题
+### 快捷栏图标：故意不画
 
-原来快捷栏里所有被搬的方块都显示同一张"箱子"贴图。现在
-`ItemTile.getIconIndex(ItemStack)` 会按当前物品的 NBT 动态解析图标：
+搬运物那张物品在快捷栏/背包里**不显示任何图标**，`ItemTile.getIconFromDamage`
+返回的是 `assets/carryonunoffical/textures/items/tile.png`——一张 16×16 **全透明**的贴图。
 
-1. 有模型覆盖 → 用覆盖目标的图标；
-2. 否则 → 用被搬方块自身的物品图标；
-3. 都没有（例如 `lit_furnace` 没有物品形态）→ 回退到通用贴图。
+理由有两条：
 
-这正是 1.8 里 `ItemMeshDefinition` 干的事。
+1. 被搬的东西真正长什么样，`RenderEvents` 已经在第一/第三人称按 3D 模型画出来了。
+   槽位里再放一张平面方块贴图（只有某一面），看起来像"手里还多了个东西"，反而干扰。
+2. 1.7.10 里想画"被搬方块自己的图标"是做不到的：贴图分在两张图集——方块
+   （spriteNumber 0）和物品（1），`IIcon` 只带一组**归一化** UV，不带"我属于哪张图集"，
+   调用方按 `ItemStack.getItemSpriteNumber()` 决定绑哪张。本物品的 spriteNumber 是 1，
+   方块贴图却在方块图集上，错绑不会报错，只会采样到物品图集里同一块区域——
+   玩家看到的就是**"别的物品的图标"**，每个方块落在哪块区域完全随机。
+   （曾经试过注册 `IItemRenderer` 接管 `ItemRenderType.INVENTORY`、自己绑方块图集，
+   能画对，但按上面第 1 条，最终决定不画。）
+
+### 抱起时锁背包
+
+`InventoryLockEvents` 监听 `GuiOpenEvent`：手上有搬运物时，取消打开的
+`GuiInventory` / `GuiContainerCreative`。
+
+1.7.10 的 `Minecraft.displayGuiScreen` 会先 `post` 这个事件，**被取消就整段 return**，
+所以背包根本不会初始化，屏幕上不会闪一下——比"打开后再 `closeScreen`"干净。
+
+只拦背包，不拦箱子/工作台：搬运中右键已经被 `ItemEvents` 接管去"放下"了，
+而且背包能重排物品栏、把搬运物挪到别的格子，等于绕过"搬运中锁定快捷栏"。
 
 ---
 
@@ -468,7 +502,7 @@ export JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot"
 # 产物: build/carryon-1.0.0.jar
 ```
 
-依赖 `deps/backportapi-1.0.0.jar`（编译期）。运行期需要 mods 目录里同时存在 BackportAPI。
+依赖 `deps/backportapi-1.1.0.jar`（编译期）。运行期需要 mods 目录里同时存在 BackportAPI 1.1.0。
 
 ---
 
@@ -483,3 +517,56 @@ export JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot"
 4. 脚本系统（`config/carryon-scripts/*.json`）在 `useScripts=true` 下的表现。
 5. **放下朝向**：朝东南西北四个方向各放一次箱子/熔炉，正面都应朝着自己；
    模组容器（铁箱子等）走 `onBlockPlacedBy` 兜底，行为取决于模组自己的实现。
+   林业箱子与神秘时代蒸馏器由 `PostPlaceRotators` 接管（日志里有 `[CarryOn] post-rotate` 一行）。
+6. **快捷栏槽位**：搬起任何方块/容器，槽位里都应是空的（贴图全透明），
+   既不该出现方块图标，也不该出现"别的物品"的图标。
+7. **抱起时锁背包**：手上有搬运物时按 E（以及创造模式背包键）应毫无反应；
+   放下之后能正常打开。
+
+---
+
+## 变更记录
+
+> 版本号按发布批次编号，不严格单调。1.0.4 / 1.0.5 是开发期的内部迭代号，已并入下面的 1.0.1。
+
+### 1.0.1
+
+- **change: 搬起改为「潜行 + 右键」，不再占用独立按键。**
+  上游本来就是蹲下触发；移植版早先用 `Keyboard.KEY_LSHIFT` 的 `KeyBinding`，再由客户端 tick
+  把 `carryOnKeyPressed` 同步到服务端 NBT。现在服务端直接判 `player.isSneaking()`，
+  同时删掉 `CarryOnKeybinds`、`SyncKeybindPacket` / `SyncKeybindPacketHandler` 及对应网络注册
+  （消息 id 0 空出，1/2 不受影响），`options.txt` 里的旧键位与玩家 NBT 里的旧标签都会自动失效。
+- 行为差异：潜行且手持物品时客户端不会发出右键包（原版 `doesSneakBypassUse` 判定），
+  因此「放下」要先松开潜行——与上游一致。
+
+- **fix: 与 BackportAPI 1.1.0 同步改名，修掉 Java 8 上的 `SecurityException: signer information does not match`。**
+  BackportAPI 把 `@Config` / `ConfigManager`、`AttachCapabilitiesEvent`、`PlayerContainerEvent` 从
+  `net.minecraftforge.common.config` / `net.minecraftforge.event[.entity.player]` 迁到了
+  `net.backportapi.forge.config` / `net.backportapi.forge.event`。
+  原因是 Forge 1.7.10 的 jar 带 DSA + SHA-1 签名，仍校验 SHA-1 的 JDK（8u251、JDK 9）会把
+  `net.minecraftforge.common.config` 视为"已签名包"，无签名的回填类一进同包就被
+  `ClassLoader.checkCerts` 拒绝（表现为 `NoClassDefFoundError: ConfigManager`）。
+  改名后与 JDK 的签名策略无关，Java 8 / 17 / 21 / 25 行为一致。改动仅 6 行 import。
+- 编译依赖 `deps/backportapi-1.1.0.jar`；运行期需 BackportAPI **1.1.0**（1.0.0 不同包名，不可混用）。
+
+### 1.0.3
+
+- **fix: TE-based blocks (Forestry chests, Thaumcraft alembic) did not face the player after being placed by Carry On.**
+  这类方块的朝向不在 metadata 里，而在 TileEntity 字段里（`TileForestry.orientation` /
+  `TileAlembic.facing`）。原来的流程是 `setBlockState → onBlockPlacedBy → readFromNBT`：
+  林业的朝向逻辑在 **ItemBlock** 层（`ItemBlockForestry.placeBlockAt`），CarryOn 直接写世界
+  永远不经过它；神秘时代的 `onBlockPlacedBy` 其实算对了，却紧接着被 `readFromNBT` 读回的旧值冲掉。
+  新增放置后阶段 `PostPlaceRotators`（`IPostPlaceRotator` + 两张内置适配器，全反射、不 import
+  林业/神秘时代），在 NBT 恢复之后修正朝向，并补一次 `markBlockForUpdate` 让客户端 TE 数据刷新
+  （方块落地时那次描述包发在"设朝向之前"）。未命中适配器时返回 false，行为与修复前一致。
+  配置项：`B:postPlaceRotation=true`。
+
+### 1.0.0
+
+- **fix: suppress duplicated block drop when picking up blocks that drop themselves in `breakBlock`**
+  林业工作台（`Forestry:factory2:2`）把"掉落本体"写在 `breakBlock` 里（`tryDropAsWorktable` →
+  `InventoryUtil.dropItemStackFromInventory` → `spawnEntityInWorld`）。1.7.10 移除方块一定会回调
+  `breakBlock`，所以"抱起"这个动作会额外生成一个同种方块的物品实体——抱起 1 个，净赚 1 个。
+  新增 `PickupGuard`：只在"移除被拾取方块"的那几行代码里建立作用域，把同一瞬间生成的
+  **同世界 + 同坐标 + 同方块** 的 `EntityItem` 取消并 `setDead()`。不改 `breakBlock` 本身，
+  正常挖掘、其他玩家/其他来源的掉落都不受影响。

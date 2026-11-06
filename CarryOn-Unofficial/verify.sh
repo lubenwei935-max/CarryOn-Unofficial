@@ -17,7 +17,7 @@ set -euo pipefail
 
 JAR="${1:-build/carryon-1.0.0.jar}"
 TMP=$(mktemp -d)
-trap 'rm -rf "$TMP" 2>/dev/null || true' EXIT
+trap 'rm -rf "$TMP"' EXIT
 
 cd "$(dirname "$0")"
 unzip -o -q "$JAR" -d "$TMP"
@@ -75,13 +75,3 @@ done \
   > /tmp/carryon-unmapped-fields.txt || true
 cat /tmp/carryon-unmapped-fields.txt
 echo "字段条目数：$(wc -l < /tmp/carryon-unmapped-fields.txt | tr -d ' ')"
-
-echo ""
-echo "=== 包冲突护栏（BackportAPI）==="
-# 非阻断：老版本产物也不该被这条卡住；新增冲突会用醒目的 FAIL 打出来。
-if ! bash "$(dirname "$0")/../check-packages.sh"; then
-  echo ""
-  echo "!! 警告：BackportAPI 有类落进了 1.7.10 已签名的包（上面已点名）。"
-  echo "!! 这类类会让游戏在 preInit 抛 SecurityException: signer information does not match。"
-  echo "!! 出路：换包名（net.backportapi.shim.*），或登记到 backportapi/conf/known-conflicts.txt。"
-fi

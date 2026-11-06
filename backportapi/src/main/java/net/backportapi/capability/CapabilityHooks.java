@@ -1,11 +1,11 @@
 package net.backportapi.capability;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.backportapi.forge.event.AttachCapabilitiesEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityDispatcher;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 

@@ -2,6 +2,7 @@ package tschipp.carryon.common.capabilities.event;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.backportapi.capability.Capabilities;
+import net.backportapi.forge.event.AttachCapabilitiesEvent;
 import net.backportapi.util.Worlds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,7 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import tschipp.carryon.CarryOn;
 import tschipp.carryon.common.capabilities.IPosition;

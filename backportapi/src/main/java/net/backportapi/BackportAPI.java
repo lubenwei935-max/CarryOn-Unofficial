@@ -8,10 +8,10 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.backportapi.capability.CapabilityHooks;
 import net.backportapi.event.ContainerEventHooks;
+import net.backportapi.forge.config.ConfigManager;
 import net.backportapi.hand.Hands;
 import net.backportapi.util.Scheduling;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 /**
@@ -32,8 +32,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
  *   <li>{@code net.minecraft.client.renderer} —— GlStateManager</li>
  *   <li>{@code net.minecraftforge.common.capabilities} —— 完整的 Capability 对象模型</li>
  *   <li>{@code net.minecraftforge.items} —— IItemHandler / ItemStackHandler</li>
- *   <li>{@code net.minecraftforge.common.config} —— @Config + ConfigManager</li>
- *   <li>{@code net.minecraftforge.event} —— AttachCapabilitiesEvent / PlayerContainerEvent</li>
+ *   <li>{@code net.backportapi.forge.config} —— @Config + ConfigManager（刻意避开 Forge 已占用的包）</li>
+ *   <li>{@code net.backportapi.forge.event} —— AttachCapabilitiesEvent / PlayerContainerEvent（同上）</li>
  * </ul>
  *
  * <h3>副手</h3>
@@ -48,7 +48,7 @@ public class BackportAPI
 {
 	public static final String MODID = "backportapi";
 	public static final String NAME = "BackportAPI";
-	public static final String VERSION = "1.0.0";
+	public static final String VERSION = "1.1.0";
 	public static final String ACCEPTED_VERSIONS = "[1.7.10]";
 
 	@Mod.Instance(BackportAPI.MODID)

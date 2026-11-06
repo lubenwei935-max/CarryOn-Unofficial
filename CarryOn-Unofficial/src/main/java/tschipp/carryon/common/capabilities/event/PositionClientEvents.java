@@ -5,6 +5,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.backportapi.capability.Capabilities;
+import net.backportapi.forge.event.PlayerContainerEvent;
 import net.backportapi.util.Worlds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -13,7 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import tschipp.carryon.common.capabilities.IPosition;
 import tschipp.carryon.common.capabilities.PositionProvider;
 

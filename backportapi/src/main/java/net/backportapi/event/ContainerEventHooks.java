@@ -5,10 +5,10 @@ import java.util.WeakHashMap;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import net.backportapi.forge.event.PlayerContainerEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 
 /**
  * 合成 1.8 的 PlayerContainerEvent.Open / Close。

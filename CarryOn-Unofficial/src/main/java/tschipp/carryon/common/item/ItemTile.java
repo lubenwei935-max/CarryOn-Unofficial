@@ -38,6 +38,7 @@ import net.minecraft.world.World;
 import tschipp.carryon.CarryOn;
 import tschipp.carryon.common.config.Configs;
 import tschipp.carryon.common.handler.ModelOverridesHandler;
+import tschipp.carryon.common.handler.PostPlaceRotators;
 import tschipp.carryon.network.client.CarrySlotPacket;
 
 /**
@@ -73,6 +74,18 @@ public class ItemTile extends Item
 		this.itemIcon = register.registerIcon(CarryOn.MODID + ":tile");
 	}
 
+	/**
+	 * 槽位图标：<b>故意什么都不画</b>。
+	 *
+	 * <p>被搬的东西真正"长什么样"已经由 {@code RenderEvents} 在第一/第三人称画出来了，
+	 * 快捷栏里再放一张方块贴图（平的，而且只有某一面）只会让人以为手里多了个东西。
+	 * 所以这里统一返回本模组那张<b>全透明</b>的 {@code textures/items/tile.png}。
+	 *
+	 * <p>为什么不能返回"被搬方块自己的图标"：1.7.10 有两张图集（方块 / 物品），
+	 * {@code IIcon} 只带一组归一化 UV，不带"我属于哪张图集"。本物品的 spriteNumber
+	 * 是 1（物品图集），方块贴图却在方块图集上——错绑不报错，只会画成物品图集里
+	 * 同一块区域，也就是"别的物品的图标"。
+	 */
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromDamage(int meta)
@@ -95,38 +108,6 @@ public class ItemTile extends Item
 				return istack.getDisplayName();
 		}
 		return "";
-	}
-
-	/**
-	 * 让快捷栏/背包里显示"被搬的那个方块"的图标，而不是统一的箱子贴图。
-	 *
-	 * <p>1.7.10 没有物品模型系统，图标只能通过 {@code IIcon} 提供；
-	 * 这里按当前 ItemStack 的 NBT 动态解析，等价于 1.8 的 ItemMeshDefinition。
-	 */
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconIndex(ItemStack stack)
-	{
-		if (stack != null && hasTileData(stack))
-		{
-			RenderTarget target = ModelOverridesHandler.getRenderTarget(getBlockState(stack), getTileData(stack));
-			if (target != null)
-			{
-				IIcon icon = target.getIcon();
-				if (icon != null)
-					return icon;
-			}
-
-			ItemStack carried = getItemStack(stack);
-			if (carried != null)
-			{
-				IIcon icon = carried.getIconIndex();
-				if (icon != null)
-					return icon;
-			}
-		}
-
-		return super.getIconIndex(stack);
 	}
 
 	/**
@@ -259,6 +240,31 @@ public class ItemTile extends Item
 							+ " meta=" + world.getBlockMetadata(pos2.getX(), pos2.getY(), pos2.getZ())
 							+ " look=" + facing2 + " yaw=" + player.rotationYaw
 							+ " prop=" + set + " clobbered=" + clobbered);
+
+					// ③ 修正"朝向存在 TileEntity 里"的方块。
+					//
+					// 必须放在 readFromNBT 之后：神秘时代的蒸馏器在 onBlockPlacedBy 里
+					// 已经把 facing 算对了，却被 readFromNBT 读回的旧值冲掉；林业的箱子
+					// 则从头到尾没人设（它的朝向逻辑在 ItemBlock 层，我们直接写世界不经过）。
+					//
+					// 只认已知的 TE：未命中时 PostPlaceRotators 返回 false，
+					// 不改任何行为，等于零回归。
+					if (Configs.Settings.postPlaceRotation)
+					{
+						boolean rotated = PostPlaceRotators.apply(world, pos2.getX(), pos2.getY(), pos2.getZ(),
+								containedblock, placedState.getMeta(), player);
+
+						if (rotated)
+						{
+							// 方块落地时（flags=3）已经发过一次 TE 描述包，但那是在"设朝向之前"，
+							// 客户端拿到的是旧朝向，不重载区块不会自己更正。补发一次。
+							world.markBlockForUpdate(pos2.getX(), pos2.getY(), pos2.getZ());
+
+							CarryOn.LOGGER.info("[CarryOn] post-rotate " + Block.blockRegistry.getNameForObject(containedblock)
+									+ " pos=" + pos2.getX() + "," + pos2.getY() + "," + pos2.getZ()
+									+ " meta=" + placedState.getMeta() + " look=" + facing2 + " handled=true");
+						}
+					}
 
 					Hands.setMainhand(player, null);
 					player.getEntityData().removeTag("overrideKey");

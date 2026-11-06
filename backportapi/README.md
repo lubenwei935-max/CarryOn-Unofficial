@@ -131,13 +131,21 @@ candidate 多余的键不影响结果。
 
 `IItemHandler`、`ItemStackHandler`、`CapabilityItemHandler`、`InventoryWrapper`（把 `IInventory` 包成 `IItemHandler`）
 
-### `net.minecraftforge.common.config`
+### `net.backportapi.forge.config`
 
 `@Config` + `@Config.Comment` / `@Config.RangeInt` / `@Config.RangeDouble` / `@Config.LangKey`，配合 `ConfigManager.sync(modid, Configs.class)`
 
-### `net.minecraftforge.event`
+> **为什么不放在 `net.minecraftforge.common.config`**：1.7.10 的 Forge jar 自带这个包
+> （`Configuration`、`Property`、`ConfigCategory`），且该 jar 带 DSA/SHA-1 签名。在仍校验
+> SHA-1 的 JDK（8u251、JDK 9）上，`ClassLoader.checkCerts` 会拒绝把无签名的类塞进这个
+> 已签名包，抛 `SecurityException: signer information does not match`。详见文末「签名包」一节。
+
+### `net.backportapi.forge.event`
 
 `AttachCapabilitiesEvent`、`PlayerContainerEvent`（Open/Close 由 tick 对比 `openContainer` 合成）
+
+> 同理：`net.minecraftforge.event` 与 `net.minecraftforge.event.entity.player` 都被 Forge 占用。
+> `Configuration` / `Property` / `PlayerEvent` / `EntityEvent` 这些**真类**仍从原包导入，不受影响。
 
 ---
 
@@ -288,11 +296,6 @@ $env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-8.0.492.9-hotspot"
 .\build.ps1 -Version 1.0.0
 ```
 
-> **构建末尾请跑一次包冲突护栏**：`../check-packages.sh`（已挂在 `CarryOn-Unofficial/verify.sh` 末尾，非阻断）。
-> 它把产物与 `deps/forgebin.jar` + `deps/mcp.jar` 的包名求交集，只要有类又落进 1.7.10 **已签名**的包
-> （如 `net.minecraft.util`、`net.minecraftforge.common.config`），就会 `FAIL` 并点名。
-> 已知的 19 个类登记在 `conf/known-conflicts.txt`；新增的必须换包名，不能直接加进白名单蒙混过关。
-
 ### 目录结构
 
 ```
@@ -324,18 +327,40 @@ backportapi/
 
 ## 类名放在 `net.minecraft.*` 下有风险吗
 
-有，而且不止一种：
+有，但可控：
 
-- 这些类在 1.7.10 里**不存在**，不会与游戏本体撞类名；
+- 这些类在 1.7.10 里**不存在**，不会与游戏本体冲突；
 - FML 的 `FMLDeobfuscatingRemapper` 只重映射映射表里有的类，本库的类不在表中，会原样通过；
 - 真正的风险是**与其他回填库撞名**。如果你同时装了别的 1.8-API 回填模组（如某些 GTNH 组件），需要确认它们没有定义同名类。
-- **更隐蔽的一条：与签名 jar 的「包」冲突。** 1.7.10 的游戏 jar 是签过名的
-  （Mojang 的 `META-INF/MOJANGCS.SF`、Forge 的 `META-INF/FORGE.SF`），
-  JVM 要求同一个包里所有类的签名信息一致。把 19 个无签名的类塞进 7 个已签名的包，
-  就会在 `preInit` 抛 `SecurityException: class "..."'s signer information does not match`。
-  这条与 JDK 版本无关，也不是撞名问题，**只能靠去签名或换包名解决**；
-  完整取证与实测见 `port-analysis/TEST-REPORT-signature-conflict.md`，
-  日常构建用 `../check-packages.sh` 兜底。
+
+### `net.minecraftforge.*` 更危险：已签名的包不能被"追加"
+
+`net.minecraft.*` 的类在运行时都是混淆名（`bao`、`add`…），落在**默认包**里，所以把回填类放进
+`net.minecraft.util.math` 这类包不会和任何人撞。但 `net.minecraftforge.*` 不一样：Forge 的 jar 里
+的类**就是这些真名**，而且这个 jar 带签名。
+
+JVM 的 `ClassLoader.checkCerts` 要求「同一个 ClassLoader 下、同一个包名」的所有类证书一致：
+
+| JDK | 对 Forge jar（DSA + SHA-1，2015 年签）的处理 | 结果 |
+|---|---|---|
+| 8u251 / JDK 9 | 仍校验签名，`Configuration` 带证书 | 无签名的回填类被拒，`SecurityException` |
+| 8u3xx+ / 17 / 21 / 25 | 判为弱算法 → `jarsigner` 报 "treated as unsigned" | 两者都无证书，通过 |
+
+也就是说 1.0.0 能不能跑**取决于 JDK 的签名策略**——表现就是"Java 8 崩、Java 25 正常"，
+而真正的分界线其实是 `jdk.jar.disabledAlgorithms` 里有没有 `SHA1 denyAfter 2019-01-01`
+（8u492 是 Java 8，一样能跑；JDK 9 反而不行）。1.1.0 把这几个类整体搬出 `net.minecraftforge.*`，
+任何 JDK 行为一致：
+
+| 1.0.0（已废弃） | 1.1.0 起 |
+|---|---|
+| `net.minecraftforge.common.config.Config` | `net.backportapi.forge.config.Config` |
+| `net.minecraftforge.common.config.ConfigManager` | `net.backportapi.forge.config.ConfigManager` |
+| `net.minecraftforge.event.AttachCapabilitiesEvent` | `net.backportapi.forge.event.AttachCapabilitiesEvent` |
+| `net.minecraftforge.event.entity.player.PlayerContainerEvent` | `net.backportapi.forge.event.PlayerContainerEvent` |
+
+> 排查手法：`jarsigner -verify <forge jar>`。若输出 "The jar will be treated as unsigned,
+> because it is signed with a weak algorithm that is now disabled"，说明该 JDK 不会产生
+> 证书，1.0.0 也不会崩；反之就会崩。
 
 ---
 

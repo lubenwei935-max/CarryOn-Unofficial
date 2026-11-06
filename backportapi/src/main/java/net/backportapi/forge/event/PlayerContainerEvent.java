@@ -1,7 +1,8 @@
-package net.minecraftforge.event.entity.player;
+package net.backportapi.forge.event;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 
 /**
  * 1.8+ PlayerContainerEvent 的 1.7.10 回填。

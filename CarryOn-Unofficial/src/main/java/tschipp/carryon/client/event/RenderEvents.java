@@ -24,14 +24,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import tschipp.carryon.CarryOn;
-import tschipp.carryon.client.keybinds.CarryOnKeybinds;
 import tschipp.carryon.common.config.Configs;
 import tschipp.carryon.common.handler.ModelOverridesHandler;
 import tschipp.carryon.common.handler.RegistrationHandler;
 import tschipp.carryon.common.item.ItemEntity;
 import tschipp.carryon.common.item.ItemTile;
-import tschipp.carryon.network.server.SyncKeybindPacket;
 
 /**
  * 搬运物的渲染。
@@ -456,7 +453,7 @@ public class RenderEvents
 		return block == net.minecraft.init.Blocks.chest || block == net.minecraft.init.Blocks.ender_chest || block == net.minecraft.init.Blocks.trapped_chest;
 	}
 
-	// ---------- tick：按键同步 + 槽位锁定 ----------
+	// ---------- tick：槽位锁定 ----------
 
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent event)
@@ -465,27 +462,8 @@ public class RenderEvents
 			return;
 
 		EntityPlayer player = event.player;
-		Minecraft mc = Minecraft.getMinecraft();
 
-		// 1) Shift 键状态同步到服务端（没有这段，服务端永远判定为没按）
-		if (player == mc.thePlayer)
-		{
-			boolean keyPressed = CarryOnKeybinds.carryKey != null && CarryOnKeybinds.carryKey.getIsKeyPressed();
-			boolean playerKeyPressed = CarryOnKeybinds.isKeyPressed(player);
-
-			if (keyPressed && !playerKeyPressed)
-			{
-				CarryOnKeybinds.setKeyPressed(player, true);
-				CarryOn.network.sendToServer(new SyncKeybindPacket(true));
-			}
-			else if (!keyPressed && playerKeyPressed)
-			{
-				CarryOnKeybinds.setKeyPressed(player, false);
-				CarryOn.network.sendToServer(new SyncKeybindPacket(false));
-			}
-		}
-
-		// 2) 搬运中锁定快捷栏：与上游一致，强行把 currentItem 拉回 carrySlot
+		// 搬运中锁定快捷栏：与上游一致，强行把 currentItem 拉回 carrySlot
 		NBTTagCompound data = player.getEntityData();
 		if (data.hasKey("carrySlot"))
 		{

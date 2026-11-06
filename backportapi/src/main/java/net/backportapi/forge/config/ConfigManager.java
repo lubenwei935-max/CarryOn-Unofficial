@@ -1,4 +1,4 @@
-package net.minecraftforge.common.config;
+package net.backportapi.forge.config;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 
 /**
  * 1.8+ ConfigManager 的 1.7.10 回填。

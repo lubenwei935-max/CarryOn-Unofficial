@@ -35,8 +35,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent.StartTracking;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import tschipp.carryon.CarryOn;
-import tschipp.carryon.client.keybinds.CarryOnKeybinds;
 import tschipp.carryon.common.config.Configs;
+import tschipp.carryon.common.handler.PickupGuard;
 import tschipp.carryon.common.handler.PickupHandler;
 import tschipp.carryon.common.handler.RegistrationHandler;
 import tschipp.carryon.common.item.ItemEntity;
@@ -71,9 +71,15 @@ public class ItemEvents
 			((ItemTile) stack.getItem()).placeFromItem(stack, player, event.world, event.x, event.y, event.z, event.face);
 	}
 
-	@SubscribeEvent(priority = EventPriority.HIGH)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onItemDropped(EntityJoinWorldEvent event)
 	{
+		// 抱起方块的那一瞬间，breakBlock 会为某些方块（林业工作台就是典型）再生成一个
+		// "掉落本体"的 EntityItem。它和已经存进携带物品 NBT 的是同一份东西，
+		// 不拦掉就是"抱起 1 个、净赚 1 个"。这里在实体加入世界的最早时机拦掉。
+		if (PickupGuard.trySuppress(event))
+			return;
+
 		Entity e = event.entity;
 		World world = event.world;
 
@@ -247,7 +253,7 @@ public class ItemEvents
 	}
 
 	/**
-	 * 主入口：Shift + 右键 搬起方块。
+	 * 主入口：潜行 + 右键 搬起方块。
 	 */
 	@SubscribeEvent
 	public void onBlockRightClick(PlayerInteractEvent event)
@@ -266,7 +272,7 @@ public class ItemEvents
 		BlockPos pos = new BlockPos(event.x, event.y, event.z);
 		IBlockState state = Worlds.getBlockState(world, pos);
 
-		if (!(main == null && off == null && CarryOnKeybinds.isKeyPressed(player)))
+		if (!(main == null && off == null && player.isSneaking()))
 			return;
 
 		ItemStack stack = new ItemStack(RegistrationHandler.itemTile);
@@ -291,8 +297,7 @@ public class ItemEvents
 		try
 		{
 			CarryOn.network.sendToAllAround(new CarrySlotPacket(player.inventory.currentItem, player.getEntityId(), overrideHash), new TargetPoint(world.provider.dimensionId, player.posX, player.posY, player.posZ, 256));
-			Worlds.removeTileEntity(world, pos);
-			Worlds.setBlockToAir(world, pos);
+			removeBlockForPickup(world, pos, state, te, false);
 			Hands.setMainhand(player, stack);
 			event.useBlock = Result.DENY;
 			event.setCanceled(true);
@@ -302,8 +307,7 @@ public class ItemEvents
 			try
 			{
 				CarryOn.network.sendToAllAround(new CarrySlotPacket(player.inventory.currentItem, player.getEntityId(), overrideHash), new TargetPoint(world.provider.dimensionId, player.posX, player.posY, player.posZ, 256));
-				emptyTileEntity(te);
-				Worlds.setBlockToAir(world, pos);
+				removeBlockForPickup(world, pos, state, te, true);
 				Hands.setMainhand(player, stack);
 				event.useBlock = Result.DENY;
 				event.setCanceled(true);
@@ -317,6 +321,36 @@ public class ItemEvents
 
 				Chat.send(player, new TextComponentString(TextFormatting.RED.format("Error detected. Cannot pick up block.")));
 			}
+		}
+	}
+
+	/**
+	 * 把"移除方块"这一步统一包进 {@link PickupGuard}。
+	 *
+	 * <p>1.7.10 移除方块一定会走 {@code Chunk.func_150807_a} 并回调旧方块的
+	 * {@code breakBlock}，而有些方块（林业工作台）把"掉落本体"写在那里。
+	 * 这里是唯一会移除被拾取方块的地方，包在这一层就不会漏。
+	 *
+	 * <p>同时把"先删 TE、再删方块"的顺序固定下来：反过来会让容器库存被
+	 * {@code breakBlock} 倒出来，而库存又已经存进了携带 NBT，那才是真正的复制。
+	 *
+	 * @param emptyFirst 异常回退路径沿用旧行为：先把 TE 库存清空再删；正常路径传 false
+	 */
+	private static void removeBlockForPickup(World world, BlockPos pos, IBlockState state, TileEntity te, boolean emptyFirst)
+	{
+		PickupGuard guard = PickupGuard.push(world, pos, state.getBlock(), state.getMeta());
+
+		try
+		{
+			if (te != null && emptyFirst)
+				emptyTileEntity(te);
+
+			Worlds.removeTileEntity(world, pos);
+			Worlds.setBlockToAir(world, pos);
+		}
+		finally
+		{
+			guard.pop();
 		}
 	}
 

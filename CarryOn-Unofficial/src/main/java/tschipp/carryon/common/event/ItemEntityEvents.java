@@ -24,7 +24,6 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import tschipp.carryon.CarryOn;
-import tschipp.carryon.client.keybinds.CarryOnKeybinds;
 import tschipp.carryon.common.config.Configs;
 import tschipp.carryon.common.handler.PickupHandler;
 import tschipp.carryon.common.handler.RegistrationHandler;
@@ -102,7 +101,7 @@ public class ItemEntityEvents
 		Entity entity = event.target;
 		BlockPos pos = new BlockPos(entity.posX, entity.posY, entity.posZ);
 
-		if (main == null && off == null && CarryOnKeybinds.isKeyPressed(player))
+		if (main == null && off == null && player.isSneaking())
 		{
 			ItemStack stack = new ItemStack(RegistrationHandler.itemEntity);
 
@@ -134,7 +133,7 @@ public class ItemEntityEvents
 			Hands.setMainhand(player, stack);
 			event.setCanceled(true);
 		}
-		else if (main != null && main.getItem() == RegistrationHandler.itemEntity && ItemEntity.hasEntityData(main) && !CarryOnKeybinds.isKeyPressed(player) && Configs.Settings.stackableEntities)
+		else if (main != null && main.getItem() == RegistrationHandler.itemEntity && ItemEntity.hasEntityData(main) && !player.isSneaking() && Configs.Settings.stackableEntities)
 		{
 			stackEntityOn(player, world, entity, pos, main);
 		}

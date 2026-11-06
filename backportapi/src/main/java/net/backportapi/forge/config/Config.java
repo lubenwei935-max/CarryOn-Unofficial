@@ -1,9 +1,11 @@
-package net.minecraftforge.common.config;
+package net.backportapi.forge.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import net.minecraftforge.common.config.Configuration;
 
 /**
  * 1.8+ @Config 注解的 1.7.10 回填。

@@ -47,7 +47,7 @@ CONF="$ROOT_WIN/conf"
 # forgebin.jar MUST be first: it is the only artifact that still carries
 # InnerClasses attributes, which javac needs to resolve nested vanilla types
 # such as ClickEvent.Action or PlayerInteractEvent.RightClickBlock.
-CP="$DEPS/backportapi-1.0.0.jar;$DEPS/forgebin.jar;$DEPS/mcp.jar;$DEPS/forge-mcp.jar;$DEPS/lwjgl-2.9.3.jar;$DEPS/netty-all-4.0.23.Final.jar;$DEPS/guava-17.0.jar;$DEPS/authlib-1.5.21.jar"
+CP="$DEPS/backportapi-1.1.0.jar;$DEPS/forgebin.jar;$DEPS/mcp.jar;$DEPS/forge-mcp.jar;$DEPS/lwjgl-2.9.3.jar;$DEPS/netty-all-4.0.23.Final.jar;$DEPS/guava-17.0.jar;$DEPS/authlib-1.5.21.jar"
 
 echo "==> clean"
 rm -rf "$BUILD/classes" "$BUILD/pkg"

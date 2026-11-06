@@ -2,7 +2,7 @@ package tschipp.carryon.common.config;
 
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.common.config.ConfigManager;
+import net.backportapi.forge.config.ConfigManager;
 import tschipp.carryon.CarryOn;
 import tschipp.carryon.common.handler.ListHandler;
 import tschipp.carryon.common.handler.ModelOverridesHandler;

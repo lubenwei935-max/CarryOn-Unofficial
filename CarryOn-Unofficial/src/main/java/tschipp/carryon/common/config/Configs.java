@@ -1,6 +1,6 @@
 package tschipp.carryon.common.config;
 
-import net.minecraftforge.common.config.Config;
+import net.backportapi.forge.config.Config;
 
 /**
  * 配置定义。
@@ -17,6 +17,9 @@ public class Configs
 	{
 		@Config.Comment("If the front of the Tile Entities should face the player or should face outward")
 		public static boolean facePlayer = false;
+
+		@Config.Comment("Fix the facing stored in the TileEntity after placement (Forestry chests, Thaumcraft alembic, ...)")
+		public static boolean postPlaceRotation = true;
 
 		@Config.Comment("More complex Tile Entities slow down the player more")
 		public static boolean heavyTiles = true;

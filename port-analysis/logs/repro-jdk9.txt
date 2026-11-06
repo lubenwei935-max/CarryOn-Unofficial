@@ -1,0 +1,29 @@
+java.version      = 9.0.7.1
+java.home         = D:\Program Files (x86)\Java\jdk9
+signed.jar        = file:/C:/Users/36039/WorkBuddy%20AI/2026-10-30-19-10-26/test/signature/build/signed.jar
+unsigned.jar      = file:/C:/Users/36039/WorkBuddy%20AI/2026-10-30-19-10-26/test/signature/build/unsigned.jar
+load order        = pkg.Signed -> pkg.Unsigned
+
+[1] loaded  pkg.Signed   signers=[1] X.509:CN=Signature Conflict Repro, O=BackportAPI Test
+    codeSource=file:/C:/Users/36039/WorkBuddy%20AI/2026-10-30-19-10-26/test/signature/build/signed.jar
+
+[2] java.lang.SecurityException: class "pkg.Unsigned"'s signer information does not match signer information of other classes in the same package
+
+java.lang.SecurityException: class "pkg.Unsigned"'s signer information does not match signer information of other classes in the same package
+	at java.base/java.lang.ClassLoader.checkCerts(ClassLoader.java:1141)
+	at java.base/java.lang.ClassLoader.preDefineClass(ClassLoader.java:896)
+	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1005)
+	at java.base/java.security.SecureClassLoader.defineClass(SecureClassLoader.java:174)
+	at java.base/java.net.URLClassLoader.defineClass(URLClassLoader.java:545)
+	at java.base/java.net.URLClassLoader.access$100(URLClassLoader.java:83)
+	at java.base/java.net.URLClassLoader$1.run(URLClassLoader.java:453)
+	at java.base/java.net.URLClassLoader$1.run(URLClassLoader.java:447)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.net.URLClassLoader.findClass(URLClassLoader.java:446)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:563)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:496)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:375)
+	at Repro.main(Repro.java:47)
+
+REPRO-OK

@@ -47,7 +47,7 @@ mkdir -p "$BP/build"
 TMP="backportapi/build/.check-packages.$$"
 rm -rf "$TMP" 2>/dev/null
 mkdir -p "$TMP"
-trap 'rm -rf "$TMP"' EXIT
+trap 'rm -rf "$TMP" 2>/dev/null || true' EXIT
 
 echo "== BackportAPI 包冲突护栏 =="
 echo "产物     : ${JAR:-<未找到>}"

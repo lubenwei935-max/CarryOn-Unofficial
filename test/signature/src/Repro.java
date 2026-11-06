@@ -12,6 +12,7 @@ import java.security.cert.X509Certificate;
  * <pre>
  *   java -cp build/repro Repro build                  # 先加载 pkg.Signed，再加载 pkg.Unsigned
  *   java -cp build/repro Repro build pkg.Unsigned     # 反序，先加载无签名类
+ *   java -cp build/repro Repro build A B              # 显式指定两个类（可换成真实 jar 里的类）
  * </pre>
  *
  * <p>退出码：0 = 复现成功（抛出了预期的 SecurityException）；1 = 没有复现。
@@ -23,20 +24,48 @@ public final class Repro
     {
         File dir = new File(args.length > 0 ? args[0] : ".");
         String first = args.length > 1 ? args[1] : "pkg.Signed";
-        String second = "pkg.Signed".equals(first) ? "pkg.Unsigned" : "pkg.Signed";
+        String second;
+        if (args.length > 2)
+        {
+            second = args[2];
+        }
+        else
+        {
+            second = "pkg.Signed".equals(first) ? "pkg.Unsigned" : "pkg.Signed";
+        }
 
         URL signedJar = new File(dir, "signed.jar").toURI().toURL();
         URL unsignedJar = new File(dir, "unsigned.jar").toURI().toURL();
+
+        // 目录里若还有别的 jar（例如 guava），一并挂上：真实 jar 里的类可能需要它们才能完成链接。
+        java.util.List<URL> urls = new java.util.ArrayList<URL>();
+        urls.add(signedJar);
+        urls.add(unsignedJar);
+        File[] extra = dir.listFiles();
+        if (extra != null)
+        {
+            java.util.Arrays.sort(extra);
+            for (File f : extra)
+            {
+                if (f.isFile() && f.getName().endsWith(".jar")
+                        && !f.getName().equals("signed.jar")
+                        && !f.getName().equals("unsigned.jar"))
+                {
+                    urls.add(f.toURI().toURL());
+                }
+            }
+        }
 
         System.out.println("java.version      = " + System.getProperty("java.version"));
         System.out.println("java.home         = " + System.getProperty("java.home"));
         System.out.println("signed.jar        = " + signedJar);
         System.out.println("unsigned.jar      = " + unsignedJar);
+        System.out.println("extra jars        = " + (urls.size() - 2));
         System.out.println("load order        = " + first + " -> " + second);
         System.out.println();
 
-        // parent = null：父加载器里没有 pkg.*，保证两个类都从这两个 jar 里出。
-        URLClassLoader cl = new URLClassLoader(new URL[]{signedJar, unsignedJar}, null);
+        // parent = null：父加载器里没有同名类，保证两个类都从这些 jar 里出。
+        URLClassLoader cl = new URLClassLoader(urls.toArray(new URL[urls.size()]), null);
         try
         {
             Class<?> c1 = Class.forName(first, true, cl);

@@ -1,0 +1,14 @@
+﻿
+== Mojang : E:\WM-test\.minecraft\versions\1.7.10-Forge_10.13.4.1614\1.7.10-Forge_10.13.4.1614.jar
+   已用 .orig 覆盖回去，剩余签名条目：META-INF/MOJANGCS.SF, META-INF/MOJANGCS.RSA
+
+== Forge(实际加载) : E:\WM-test\.minecraft\libraries\net\minecraftforge\forge\1.7.10-10.13.4.1614-1.7.10\forge-1.7.10-10.13.4.1614-1.7.10.jar
+   已用 .orig 覆盖回去，剩余签名条目：META-INF/FORGE.SF, META-INF/FORGE.DSA
+
+== Forge(universal) : E:\WM-test\.minecraft\libraries\net\minecraftforge\forge\1.7.10-10.13.4.1614-1.7.10\forge-1.7.10-10.13.4.1614-1.7.10-universal.jar
+   已用 .orig 覆盖回去，剩余签名条目：META-INF/FORGE.SF, META-INF/FORGE.DSA
+
+== 汇总
+   Mojang          已签名（META-INF/MOJANGCS.SF, META-INF/MOJANGCS.RSA）
+   Forge(实际加载)     已签名（META-INF/FORGE.SF, META-INF/FORGE.DSA）
+   Forge(universal)已签名（META-INF/FORGE.SF, META-INF/FORGE.DSA）

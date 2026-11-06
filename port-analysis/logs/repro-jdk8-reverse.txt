@@ -1,0 +1,29 @@
+java.version      = 1.8.0_492
+java.home         = C:\Program Files\Eclipse Adoptium\jdk-8.0.492.9-hotspot\jre
+signed.jar        = file:/C:/Users/36039/WorkBuddy%20AI/2026-10-30-19-10-26/test/signature/build/signed.jar
+unsigned.jar      = file:/C:/Users/36039/WorkBuddy%20AI/2026-10-30-19-10-26/test/signature/build/unsigned.jar
+load order        = pkg.Unsigned -> pkg.Signed
+
+[1] loaded  pkg.Unsigned   signers=<none>
+    codeSource=file:/C:/Users/36039/WorkBuddy%20AI/2026-10-30-19-10-26/test/signature/build/unsigned.jar
+
+[2] java.lang.SecurityException: class "pkg.Signed"'s signer information does not match signer information of other classes in the same package
+
+java.lang.SecurityException: class "pkg.Signed"'s signer information does not match signer information of other classes in the same package
+	at java.lang.ClassLoader.checkCerts(ClassLoader.java:891)
+	at java.lang.ClassLoader.preDefineClass(ClassLoader.java:661)
+	at java.lang.ClassLoader.defineClass(ClassLoader.java:754)
+	at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+	at java.net.URLClassLoader.defineClass(URLClassLoader.java:473)
+	at java.net.URLClassLoader.access$100(URLClassLoader.java:74)
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:369)
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:363)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:362)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:418)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:351)
+	at java.lang.Class.forName0(Native Method)
+	at java.lang.Class.forName(Class.java:348)
+	at Repro.main(Repro.java:47)
+
+REPRO-OK

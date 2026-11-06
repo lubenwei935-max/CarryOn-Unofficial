@@ -17,3 +17,6 @@ build/
 # 只保留分析报告本身。
 port-analysis/*
 !port-analysis/CarryOn-1.7.10-移植分析.md
+!port-analysis/JDK8-可行性分析.md
+!port-analysis/TEST-REPORT-signature-conflict.md
+!port-analysis/logs/

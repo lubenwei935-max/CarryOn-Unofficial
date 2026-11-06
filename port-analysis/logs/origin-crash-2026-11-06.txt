@@ -1,0 +1,395 @@
+[13:43:09] [main/INFO] [LaunchWrapper]: Loading tweak class name cpw.mods.fml.common.launcher.FMLTweaker
+[13:43:09] [main/INFO] [LaunchWrapper]: Using primary tweak class name cpw.mods.fml.common.launcher.FMLTweaker
+[13:43:09] [main/INFO] [LaunchWrapper]: Calling tweak class cpw.mods.fml.common.launcher.FMLTweaker
+[13:43:10] [main/INFO] [FML]: Forge Mod Loader version 7.99.40.1614 for Minecraft 1.7.10 loading
+[13:43:10] [main/INFO] [FML]: Java is Java HotSpot(TM) 64-Bit Server VM, version 1.8.0_251, running on Windows 10:amd64:10.0, installed at D:\Program Files (x86)\Java\jre1.8.0_251
+[13:43:10] [main/INFO] [FML]: Loading tweaker org.spongepowered.asm.launch.MixinTweaker from +unimixins-all-1.7.10-0.3.1.jar
+[13:43:10] [main/INFO] [FML]: Loading tweaker org.spongepowered.asm.launch.MixinTweaker from backhand-1.8.17.jar
+[13:43:10] [main/INFO] [FML]: Loading tweaker org.spongepowered.asm.launch.MixinTweaker from gtnhlib-0.12.0.jar
+[13:43:10] [main/INFO] [LaunchWrapper]: Loading tweak class name cpw.mods.fml.common.launcher.FMLInjectionAndSortingTweaker
+[13:43:10] [main/INFO] [LaunchWrapper]: Loading tweak class name org.spongepowered.asm.launch.MixinTweaker
+[13:43:10] [main/INFO] [mixin]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=file:/E:/Weapon%20And%20Magic/.minecraft/versions/1.7.10-Forge_10.13.4.1614/mods/+unimixins-all-1.7.10-0.3.1.jar Service=LaunchWrapper Env=CLIENT
+[13:43:10] [main/INFO] [MixinBooter]: MixinBootstrap Initializing...
+[13:43:10] [main/INFO] [mixin]: Compatibility level set to JAVA_8
+[13:43:10] [main/INFO] [unimixins]: Instantiating AllCore
+[13:43:10] [main/INFO] [unimixins]: Instantiating CompatCore
+[13:43:10] [main/INFO] [unimixins-mixinextras]: Instantiating MixinExtrasCore
+[13:43:10] [main/INFO] [FalsePatternLib DepLoader]: [LetsEncryptHelper] Starting patcher
+[13:43:11] [main/INFO] [FalsePatternLib DepLoader]: [LetsEncryptHelper] Added certificates to trust store.
+[13:43:11] [main/INFO] [FalsePatternLib DepLoader]: Found dependency: xyz.wagyourtail.jvmdowngrader:jvmdowngrader-java-api:1.3.5:downgraded-8 from jar:file:/E:/Weapon%20And%20Magic/.minecraft/versions/1.7.10-Forge_10.13.4.1614/mods/gtnhlib-0.12.0.jar!/META-INF/gtnhlib_deps8.json
+[13:43:11] [main/INFO] [FalsePatternLib DepLoader]: Found dependency: it.unimi.dsi:fastutil:8.5.18 from jar:file:/E:/Weapon%20And%20Magic/.minecraft/versions/1.7.10-Forge_10.13.4.1614/mods/gtnhlib-0.12.0.jar!/META-INF/gtnhlib_deps.json
+[13:43:11] [main/INFO] [FalsePatternLib DepLoader]: Found dependency: org.joml:joml:1.10.8 from jar:file:/E:/Weapon%20And%20Magic/.minecraft/versions/1.7.10-Forge_10.13.4.1614/mods/gtnhlib-0.12.0.jar!/META-INF/gtnhlib_deps.json
+[13:43:11] [main/INFO] [FalsePatternLib DepLoader]: Found dependency: com.mojang:brigadier:1.0.18 from jar:file:/E:/Weapon%20And%20Magic/.minecraft/versions/1.7.10-Forge_10.13.4.1614/mods/gtnhlib-0.12.0.jar!/META-INF/gtnhlib_deps.json
+[13:43:11] [main/INFO] [FalsePatternLib DepLoader]: -----------------------------------------------------------
+[13:43:11] [main/INFO] [FalsePatternLib DepLoader]: FalsePatternLib is downloading dependencies. Please wait...
+[13:43:11] [main/INFO] [FalsePatternLib DepLoader]: -----------------------------------------------------------
+[13:43:11] [Dependency Download Thread/INFO] [FalsePatternLib DepLoader]: Adding library com.mojang:brigadier:1.0.18, requested by mod jar:file:/E:/Weapon%20And%20Magic/.minecraft/versions/1.7.10-Forge_10.13.4.1614/mods/gtnhlib-0.12.0.jar!/META-INF/gtnhlib_deps.json
+[13:43:11] [Dependency Download Thread/INFO] [FalsePatternLib DepLoader]: Adding library xyz.wagyourtail.jvmdowngrader:jvmdowngrader-java-api:1.3.5-downgraded-8, requested by mod jar:file:/E:/Weapon%20And%20Magic/.minecraft/versions/1.7.10-Forge_10.13.4.1614/mods/gtnhlib-0.12.0.jar!/META-INF/gtnhlib_deps8.json
+[13:43:11] [Dependency Download Thread/INFO] [FalsePatternLib DepLoader]: Adding library it.unimi.dsi:fastutil:8.5.18, requested by mod jar:file:/E:/Weapon%20And%20Magic/.minecraft/versions/1.7.10-Forge_10.13.4.1614/mods/gtnhlib-0.12.0.jar!/META-INF/gtnhlib_deps.json
+[13:43:11] [Dependency Download Thread/INFO] [FalsePatternLib DepLoader]: Adding library org.joml:joml:1.10.8, requested by mod jar:file:/E:/Weapon%20And%20Magic/.minecraft/versions/1.7.10-Forge_10.13.4.1614/mods/gtnhlib-0.12.0.jar!/META-INF/gtnhlib_deps.json
+[13:43:11] [main/INFO] [GTNHLib]: Mirrored jvmdg stub file:/E:/Weapon%20And%20Magic/.minecraft/versions/1.7.10-Forge_10.13.4.1614/falsepattern/xyz.wagyourtail.jvmdowngrader-jvmdowngrader-java-api-1.3.5-downgraded-8.jar onto system classloader
+[13:43:11] [main/WARN] [LaunchWrapper]: Tweak class name org.spongepowered.asm.launch.MixinTweaker has already been visited -- skipping
+[13:43:11] [main/WARN] [LaunchWrapper]: Tweak class name org.spongepowered.asm.launch.MixinTweaker has already been visited -- skipping
+[13:43:11] [main/INFO] [LaunchWrapper]: Loading tweak class name cpw.mods.fml.common.launcher.FMLDeobfTweaker
+[13:43:11] [main/INFO] [LaunchWrapper]: Calling tweak class cpw.mods.fml.common.launcher.FMLInjectionAndSortingTweaker
+[13:43:11] [main/INFO] [LaunchWrapper]: Calling tweak class cpw.mods.fml.common.launcher.FMLInjectionAndSortingTweaker
+[13:43:11] [main/INFO] [LaunchWrapper]: Calling tweak class cpw.mods.fml.relauncher.CoreModManager$FMLPluginWrapper
+[13:43:12] [main/INFO] [FML]: Found valid fingerprint for Minecraft Forge. Certificate fingerprint e3c3d50c7c986df74c645c0ac54639741c90a557
+[13:43:12] [main/INFO] [FML]: Found valid fingerprint for Minecraft. Certificate fingerprint cd99959656f753dc28d863b46769f7f8fbaefcfc
+[13:43:12] [main/INFO] [LaunchWrapper]: Calling tweak class cpw.mods.fml.relauncher.CoreModManager$FMLPluginWrapper
+[13:43:12] [main/INFO] [LaunchWrapper]: Calling tweak class org.spongepowered.asm.launch.MixinTweaker
+[13:43:12] [main/INFO] [mixin]: Initialised Mixin FML Remapper Adapter with cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper@4bff2185
+[13:43:12] [main/INFO] [LaunchWrapper]: Calling tweak class cpw.mods.fml.common.launcher.FMLDeobfTweaker
+[13:43:12] [main/INFO] [MixinExtras|Service]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.0).
+[13:43:12] [main/INFO] [LaunchWrapper]: Loading tweak class name cpw.mods.fml.common.launcher.TerminalTweaker
+[13:43:12] [main/INFO] [LaunchWrapper]: Loading tweak class name org.spongepowered.asm.mixin.EnvironmentStateTweaker
+[13:43:12] [main/INFO] [LaunchWrapper]: Loading tweak class name com.gtnewhorizon.gtnhlib.core.fml.tweakers.LateTransformerRegistrationTweaker
+[13:43:12] [main/INFO] [LaunchWrapper]: Calling tweak class cpw.mods.fml.common.launcher.TerminalTweaker
+[13:43:12] [main/INFO] [LaunchWrapper]: Calling tweak class org.spongepowered.asm.mixin.EnvironmentStateTweaker
+[13:43:12] [main/INFO] [LaunchWrapper]: Calling tweak class com.gtnewhorizon.gtnhlib.core.fml.tweakers.LateTransformerRegistrationTweaker
+[13:43:13] [main/INFO] [LaunchWrapper]: Launching wrapped minecraft {net.minecraft.client.main.Main}
+[13:43:13] [main/INFO]: Setting user: Ren
+[13:43:14] [Client thread/INFO]: LWJGL Version: 2.9.1
+[13:43:14] [Client thread/INFO] [unimixins]: Transforming FMLCommonHandler to add hook for enhancing crash reports
+[13:43:14] [Client thread/INFO] [STDOUT]: [cpw.mods.fml.client.SplashProgress:start:188]: ---- Minecraft Crash Report ----
+// Who set us up the TNT?
+
+Time: 26-11-6 下午1:43
+Description: Loading screen debug info
+
+This is just a prompt for computer specs to be printed. THIS IS NOT A ERROR
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- System Details --
+Details:
+	Minecraft Version: 1.7.10
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 1.8.0_251, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 406462328 bytes (387 MB) / 536870912 bytes (512 MB) up to 6442450944 bytes (6144 MB)
+	JVM Flags: 10 total; -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump -Xmx6144m -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:G1HeapRegionSize=32M -XX:MaxGCPauseMillis=50 -XX:+PerfDisableSharedMem -XX:+ParallelRefProcEnabled
+	AABB Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	FML: 
+	GL info: ' Vendor: 'NVIDIA Corporation' Version: '4.6.0 NVIDIA 572.83' Renderer: 'NVIDIA GeForce RTX 4050 Laptop GPU/PCIe/SSE2'
+	Mixins in Stacktrace: 
+		net.minecraft.client.Minecraft:
+			mixins.backhand.early.json:minecraft.MixinMinecraft from mod backhand
+			mixins.gtnhlib.early.json:MixinMinecraft_PickBlockTrap from mod gtnhlib
+[13:43:14] [Client thread/INFO] [MinecraftForge]: Attempting early MinecraftForge initialization
+[13:43:14] [Client thread/INFO] [FML]: MinecraftForge v10.13.4.1614 Initialized
+[13:43:14] [Client thread/INFO] [FML]: Replaced 183 ore recipies
+[13:43:14] [Client thread/INFO] [MinecraftForge]: Completed early MinecraftForge initialization
+[13:43:14] [Client thread/INFO] [FML]: Found 0 mods from the command line. Injecting into mod discoverer
+[13:43:14] [Client thread/INFO] [FML]: Searching E:\Weapon And Magic\.minecraft\versions\1.7.10-Forge_10.13.4.1614\mods for mods
+[13:43:14] [Client thread/INFO] [FML]: Also searching E:\Weapon And Magic\.minecraft\versions\1.7.10-Forge_10.13.4.1614\mods\1.7.10 for mods
+[13:43:18] [Client thread/ERROR] [FML]: Unable to read a class file correctly
+java.lang.IllegalArgumentException
+	at org.objectweb.asm.ClassReader.<init>(Unknown Source) ~[asm-all-5.0.3.jar:5.0.3]
+	at org.objectweb.asm.ClassReader.<init>(Unknown Source) ~[asm-all-5.0.3.jar:5.0.3]
+	at org.objectweb.asm.ClassReader.<init>(Unknown Source) ~[asm-all-5.0.3.jar:5.0.3]
+	at cpw.mods.fml.common.discovery.asm.ASMModParser.<init>(ASMModParser.java:52) [ASMModParser.class:?]
+	at cpw.mods.fml.common.discovery.JarDiscoverer.discover(JarDiscoverer.java:72) [JarDiscoverer.class:?]
+	at cpw.mods.fml.common.discovery.ContainerType.findMods(ContainerType.java:42) [ContainerType.class:?]
+	at cpw.mods.fml.common.discovery.ModCandidate.explore(ModCandidate.java:71) [ModCandidate.class:?]
+	at cpw.mods.fml.common.discovery.ModDiscoverer.identifyMods(ModDiscoverer.java:131) [ModDiscoverer.class:?]
+	at cpw.mods.fml.common.Loader.identifyMods(Loader.java:364) [Loader.class:?]
+	at cpw.mods.fml.common.Loader.loadMods(Loader.java:489) [Loader.class:?]
+	at cpw.mods.fml.client.FMLClientHandler.beginMinecraftLoading(FMLClientHandler.java:208) [FMLClientHandler.class:?]
+	at net.minecraft.client.Minecraft.func_71384_a(Minecraft.java:480) [bao.class:?]
+	at net.minecraft.client.Minecraft.func_99999_d(Minecraft.java:878) [bao.class:?]
+	at net.minecraft.client.main.Main.main(SourceFile:148) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_251]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at java.lang.reflect.Method.invoke(Unknown Source) ~[?:1.8.0_251]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+[13:43:18] [Client thread/ERROR] [FML]: There was a problem reading the entry module-info.class in the jar E:\Weapon And Magic\.minecraft\versions\1.7.10-Forge_10.13.4.1614\falsepattern\org.joml-joml-1.10.8.jar - probably a corrupt zip
+cpw.mods.fml.common.LoaderException: java.lang.IllegalArgumentException
+
+	at cpw.mods.fml.common.discovery.asm.ASMModParser.<init>(ASMModParser.java:58) ~[ASMModParser.class:?]
+	at cpw.mods.fml.common.discovery.JarDiscoverer.discover(JarDiscoverer.java:72) [JarDiscoverer.class:?]
+	at cpw.mods.fml.common.discovery.ContainerType.findMods(ContainerType.java:42) [ContainerType.class:?]
+	at cpw.mods.fml.common.discovery.ModCandidate.explore(ModCandidate.java:71) [ModCandidate.class:?]
+	at cpw.mods.fml.common.discovery.ModDiscoverer.identifyMods(ModDiscoverer.java:131) [ModDiscoverer.class:?]
+	at cpw.mods.fml.common.Loader.identifyMods(Loader.java:364) [Loader.class:?]
+	at cpw.mods.fml.common.Loader.loadMods(Loader.java:489) [Loader.class:?]
+	at cpw.mods.fml.client.FMLClientHandler.beginMinecraftLoading(FMLClientHandler.java:208) [FMLClientHandler.class:?]
+	at net.minecraft.client.Minecraft.func_71384_a(Minecraft.java:480) [bao.class:?]
+	at net.minecraft.client.Minecraft.func_99999_d(Minecraft.java:878) [bao.class:?]
+	at net.minecraft.client.main.Main.main(SourceFile:148) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_251]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at java.lang.reflect.Method.invoke(Unknown Source) ~[?:1.8.0_251]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+Caused by: java.lang.IllegalArgumentException
+	at org.objectweb.asm.ClassReader.<init>(Unknown Source) ~[asm-all-5.0.3.jar:5.0.3]
+	at org.objectweb.asm.ClassReader.<init>(Unknown Source) ~[asm-all-5.0.3.jar:5.0.3]
+	at org.objectweb.asm.ClassReader.<init>(Unknown Source) ~[asm-all-5.0.3.jar:5.0.3]
+	at cpw.mods.fml.common.discovery.asm.ASMModParser.<init>(ASMModParser.java:52) ~[ASMModParser.class:?]
+	... 16 more
+[13:43:18] [Client thread/WARN] [FML]: Zip file org.joml-joml-1.10.8.jar failed to read properly, it will be ignored
+cpw.mods.fml.common.LoaderException: java.lang.IllegalArgumentException
+
+	at cpw.mods.fml.common.discovery.asm.ASMModParser.<init>(ASMModParser.java:58) ~[ASMModParser.class:?]
+	at cpw.mods.fml.common.discovery.JarDiscoverer.discover(JarDiscoverer.java:72) [JarDiscoverer.class:?]
+	at cpw.mods.fml.common.discovery.ContainerType.findMods(ContainerType.java:42) [ContainerType.class:?]
+	at cpw.mods.fml.common.discovery.ModCandidate.explore(ModCandidate.java:71) [ModCandidate.class:?]
+	at cpw.mods.fml.common.discovery.ModDiscoverer.identifyMods(ModDiscoverer.java:131) [ModDiscoverer.class:?]
+	at cpw.mods.fml.common.Loader.identifyMods(Loader.java:364) [Loader.class:?]
+	at cpw.mods.fml.common.Loader.loadMods(Loader.java:489) [Loader.class:?]
+	at cpw.mods.fml.client.FMLClientHandler.beginMinecraftLoading(FMLClientHandler.java:208) [FMLClientHandler.class:?]
+	at net.minecraft.client.Minecraft.func_71384_a(Minecraft.java:480) [bao.class:?]
+	at net.minecraft.client.Minecraft.func_99999_d(Minecraft.java:878) [bao.class:?]
+	at net.minecraft.client.main.Main.main(SourceFile:148) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_251]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at java.lang.reflect.Method.invoke(Unknown Source) ~[?:1.8.0_251]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+Caused by: java.lang.IllegalArgumentException
+	at org.objectweb.asm.ClassReader.<init>(Unknown Source) ~[asm-all-5.0.3.jar:5.0.3]
+	at org.objectweb.asm.ClassReader.<init>(Unknown Source) ~[asm-all-5.0.3.jar:5.0.3]
+	at org.objectweb.asm.ClassReader.<init>(Unknown Source) ~[asm-all-5.0.3.jar:5.0.3]
+	at cpw.mods.fml.common.discovery.asm.ASMModParser.<init>(ASMModParser.java:52) ~[ASMModParser.class:?]
+	... 16 more
+[13:43:19] [Client thread/INFO] [FML]: Forge Mod Loader has identified 16 mods to load
+[13:43:19] [Client thread/INFO] [MixinBooter]: Instantiating all ILateMixinLoader implemented classes...
+[13:43:19] [Client thread/INFO] [FML]: Attempting connection with missing mods [mcp, FML, Forge, GTNHLib Core, unimixins, unimixins-mixin, unimixins-compat, mixingasm, spongemixins, mixinbooterlegacy, gtnhmixins, mixinextras, backhand, backportapi, carryonunoffical, gtnhlib] at CLIENT
+[13:43:19] [Client thread/INFO] [FML]: Attempting connection with missing mods [mcp, FML, Forge, GTNHLib Core, unimixins, unimixins-mixin, unimixins-compat, mixingasm, spongemixins, mixinbooterlegacy, gtnhmixins, mixinextras, backhand, backportapi, carryonunoffical, gtnhlib] at SERVER
+[13:43:19] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:UniMixins, FMLFileResourcePack:UniMixins: Mixin (UniMix), FMLFileResourcePack:UniMixins: Compatibility, FMLFileResourcePack:UniMixins: Mixingasm, FMLFileResourcePack:UniMixins: SpongeMixins, FMLFileResourcePack:UniMixins: MixinBooterLegacy, FMLFileResourcePack:UniMixins: GTNHMixins, FMLFileResourcePack:UniMixins: MixinExtras, FMLFileResourcePack:Backhand, FMLFileResourcePack:BackportAPI, FMLFileResourcePack:CarryOn-Unofficial, FMLFileResourcePack:GTNH Lib
+[13:43:19] [Client thread/INFO] [FML]: Processing ObjectHolder annotations
+[13:43:19] [Client thread/INFO] [FML]: Found 341 ObjectHolder annotations
+[13:43:19] [Client thread/INFO] [FML]: Identifying ItemStackHolder annotations
+[13:43:19] [Client thread/INFO] [FML]: Found 0 ItemStackHolder annotations
+[13:43:19] [Client thread/INFO] [FML]: Configured a dormant chunk cache size of 0
+[13:43:19] [Client thread/INFO] [gtnhlib]: GTNHLib MUI2 integration enabled (for teams UI): false
+[13:43:19] [Client thread/INFO] [gtnhlib]: GTNHLib version 0.12.0 loaded.
+[13:43:19] [Client thread/INFO] [gtnhlib]: Number formatting: Using System Default (zh_CN)
+[13:43:19] [Client thread/INFO] [FML]: Applying holder lookups
+[13:43:19] [Client thread/INFO] [FML]: Holder lookups applied
+[13:43:19] [Client thread/INFO] [FML]: Injecting itemstacks
+[13:43:19] [Client thread/INFO] [FML]: Itemstack injection complete
+[13:43:19] [Client thread/ERROR] [FML]: Fatal errors were detected during the transition from PREINITIALIZATION to INITIALIZATION. Loading cannot continue
+[13:43:19] [Client thread/ERROR] [FML]: 
+	States: 'U' = Unloaded 'L' = Loaded 'C' = Constructed 'H' = Pre-initialized 'I' = Initialized 'J' = Post-initialized 'A' = Available 'D' = Disabled 'E' = Errored
+	UCH	mcp{9.05} [Minecraft Coder Pack] (minecraft.jar) 
+	UCH	FML{7.10.99.99} [Forge Mod Loader] (forge-1.7.10-10.13.4.1614-1.7.10.jar) 
+	UCH	Forge{10.13.4.1614} [Minecraft Forge] (forge-1.7.10-10.13.4.1614-1.7.10.jar) 
+	UCH	GTNHLib Core{0.12.0} [GTNHLib Core] (minecraft.jar) 
+	UCH	unimixins{0.3.1} [UniMixins] (+unimixins-all-1.7.10-0.3.1.jar) 
+	UCH	unimixins-mixin{0.3.1} [UniMixins: Mixin (UniMix)] (+unimixins-all-1.7.10-0.3.1.jar) 
+	UCH	unimixins-compat{0.3.1} [UniMixins: Compatibility] (+unimixins-all-1.7.10-0.3.1.jar) 
+	UCH	mixingasm{0.3} [UniMixins: Mixingasm] (+unimixins-all-1.7.10-0.3.1.jar) 
+	UCH	spongemixins{2.0.1} [UniMixins: SpongeMixins] (+unimixins-all-1.7.10-0.3.1.jar) 
+	UCH	mixinbooterlegacy{1.2.1} [UniMixins: MixinBooterLegacy] (+unimixins-all-1.7.10-0.3.1.jar) 
+	UCH	gtnhmixins{2.2.0} [UniMixins: GTNHMixins] (+unimixins-all-1.7.10-0.3.1.jar) 
+	UCH	mixinextras{0.3.1} [UniMixins: MixinExtras] (+unimixins-all-1.7.10-0.3.1.jar) 
+	UCH	gtnhlib{0.12.0} [GTNH Lib] (gtnhlib-0.12.0.jar) 
+	UCH	backhand{1.8.17} [Backhand] (backhand-1.8.17.jar) 
+	UCE	backportapi{1.0.0} [BackportAPI] (backportapi-1.0.0.jar) 
+	UCE	carryonunoffical{1.0.3} [CarryOn-Unofficial] (carryon-1.0.3.jar) 
+[13:43:19] [Client thread/ERROR] [FML]: The following problems were captured during this phase
+[13:43:19] [Client thread/ERROR] [FML]: Caught exception from carryonunoffical
+java.lang.NoClassDefFoundError: net/minecraftforge/common/config/ConfigManager
+	at tschipp.carryon.common.CommonProxy.preInit(CommonProxy.java:36) ~[CommonProxy.class:?]
+	at tschipp.carryon.client.ClientProxy.preInit(ClientProxy.java:14) ~[ClientProxy.class:?]
+	at tschipp.carryon.CarryOn.preInit(CarryOn.java:99) ~[CarryOn.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_251]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at java.lang.reflect.Method.invoke(Unknown Source) ~[?:1.8.0_251]
+	at cpw.mods.fml.common.FMLModContainer.handleModStateEvent(FMLModContainer.java:532) ~[forge-1.7.10-10.13.4.1614-1.7.10.jar:?]
+	at sun.reflect.GeneratedMethodAccessor4.invoke(Unknown Source) ~[?:?]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at java.lang.reflect.Method.invoke(Unknown Source) ~[?:1.8.0_251]
+	at com.google.common.eventbus.EventSubscriber.handleEvent(EventSubscriber.java:74) ~[guava-17.0.jar:?]
+	at com.google.common.eventbus.SynchronizedEventSubscriber.handleEvent(SynchronizedEventSubscriber.java:47) ~[guava-17.0.jar:?]
+	at com.google.common.eventbus.EventBus.dispatch(EventBus.java:322) ~[guava-17.0.jar:?]
+	at com.google.common.eventbus.EventBus.dispatchQueuedEvents(EventBus.java:304) ~[guava-17.0.jar:?]
+	at com.google.common.eventbus.EventBus.post(EventBus.java:275) ~[guava-17.0.jar:?]
+	at cpw.mods.fml.common.LoadController.sendEventToModContainer(LoadController.java:212) ~[forge-1.7.10-10.13.4.1614-1.7.10.jar:?]
+	at cpw.mods.fml.common.LoadController.propogateStateMessage(LoadController.java:190) ~[forge-1.7.10-10.13.4.1614-1.7.10.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_251]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at java.lang.reflect.Method.invoke(Unknown Source) ~[?:1.8.0_251]
+	at com.google.common.eventbus.EventSubscriber.handleEvent(EventSubscriber.java:74) ~[guava-17.0.jar:?]
+	at com.google.common.eventbus.SynchronizedEventSubscriber.handleEvent(SynchronizedEventSubscriber.java:47) ~[guava-17.0.jar:?]
+	at com.google.common.eventbus.EventBus.dispatch(EventBus.java:322) ~[guava-17.0.jar:?]
+	at com.google.common.eventbus.EventBus.dispatchQueuedEvents(EventBus.java:304) ~[guava-17.0.jar:?]
+	at com.google.common.eventbus.EventBus.post(EventBus.java:275) ~[guava-17.0.jar:?]
+	at cpw.mods.fml.common.LoadController.distributeStateMessage(LoadController.java:119) [LoadController.class:?]
+	at cpw.mods.fml.common.Loader.preinitializeMods(Loader.java:556) [Loader.class:?]
+	at cpw.mods.fml.client.FMLClientHandler.beginMinecraftLoading(FMLClientHandler.java:243) [FMLClientHandler.class:?]
+	at net.minecraft.client.Minecraft.func_71384_a(Minecraft.java:480) [bao.class:?]
+	at net.minecraft.client.Minecraft.func_99999_d(Minecraft.java:878) [bao.class:?]
+	at net.minecraft.client.main.Main.main(SourceFile:148) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_251]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at java.lang.reflect.Method.invoke(Unknown Source) ~[?:1.8.0_251]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+Caused by: java.lang.ClassNotFoundException: net.minecraftforge.common.config.ConfigManager
+	at net.minecraft.launchwrapper.LaunchClassLoader.findClass(LaunchClassLoader.java:101) ~[launchwrapper-1.12.jar:?]
+	at java.lang.ClassLoader.loadClass(Unknown Source) ~[?:1.8.0_251]
+	at java.lang.ClassLoader.loadClass(Unknown Source) ~[?:1.8.0_251]
+	... 39 more
+[13:43:19] [Client thread/ERROR] [FML]: Caught exception from backportapi
+java.lang.NoClassDefFoundError: net/minecraftforge/common/config/ConfigManager
+	at net.backportapi.BackportAPI.preInit(BackportAPI.java:63) ~[BackportAPI.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_251]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at java.lang.reflect.Method.invoke(Unknown Source) ~[?:1.8.0_251]
+	at cpw.mods.fml.common.FMLModContainer.handleModStateEvent(FMLModContainer.java:532) ~[forge-1.7.10-10.13.4.1614-1.7.10.jar:?]
+	at sun.reflect.GeneratedMethodAccessor4.invoke(Unknown Source) ~[?:?]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at java.lang.reflect.Method.invoke(Unknown Source) ~[?:1.8.0_251]
+	at com.google.common.eventbus.EventSubscriber.handleEvent(EventSubscriber.java:74) ~[guava-17.0.jar:?]
+	at com.google.common.eventbus.SynchronizedEventSubscriber.handleEvent(SynchronizedEventSubscriber.java:47) ~[guava-17.0.jar:?]
+	at com.google.common.eventbus.EventBus.dispatch(EventBus.java:322) ~[guava-17.0.jar:?]
+	at com.google.common.eventbus.EventBus.dispatchQueuedEvents(EventBus.java:304) ~[guava-17.0.jar:?]
+	at com.google.common.eventbus.EventBus.post(EventBus.java:275) ~[guava-17.0.jar:?]
+	at cpw.mods.fml.common.LoadController.sendEventToModContainer(LoadController.java:212) ~[forge-1.7.10-10.13.4.1614-1.7.10.jar:?]
+	at cpw.mods.fml.common.LoadController.propogateStateMessage(LoadController.java:190) ~[forge-1.7.10-10.13.4.1614-1.7.10.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_251]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at java.lang.reflect.Method.invoke(Unknown Source) ~[?:1.8.0_251]
+	at com.google.common.eventbus.EventSubscriber.handleEvent(EventSubscriber.java:74) ~[guava-17.0.jar:?]
+	at com.google.common.eventbus.SynchronizedEventSubscriber.handleEvent(SynchronizedEventSubscriber.java:47) ~[guava-17.0.jar:?]
+	at com.google.common.eventbus.EventBus.dispatch(EventBus.java:322) ~[guava-17.0.jar:?]
+	at com.google.common.eventbus.EventBus.dispatchQueuedEvents(EventBus.java:304) ~[guava-17.0.jar:?]
+	at com.google.common.eventbus.EventBus.post(EventBus.java:275) ~[guava-17.0.jar:?]
+	at cpw.mods.fml.common.LoadController.distributeStateMessage(LoadController.java:119) [LoadController.class:?]
+	at cpw.mods.fml.common.Loader.preinitializeMods(Loader.java:556) [Loader.class:?]
+	at cpw.mods.fml.client.FMLClientHandler.beginMinecraftLoading(FMLClientHandler.java:243) [FMLClientHandler.class:?]
+	at net.minecraft.client.Minecraft.func_71384_a(Minecraft.java:480) [bao.class:?]
+	at net.minecraft.client.Minecraft.func_99999_d(Minecraft.java:878) [bao.class:?]
+	at net.minecraft.client.main.Main.main(SourceFile:148) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_251]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source) ~[?:1.8.0_251]
+	at java.lang.reflect.Method.invoke(Unknown Source) ~[?:1.8.0_251]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+Caused by: java.lang.ClassNotFoundException: net.minecraftforge.common.config.ConfigManager
+	at net.minecraft.launchwrapper.LaunchClassLoader.findClass(LaunchClassLoader.java:191) ~[launchwrapper-1.12.jar:?]
+	at java.lang.ClassLoader.loadClass(Unknown Source) ~[?:1.8.0_251]
+	at java.lang.ClassLoader.loadClass(Unknown Source) ~[?:1.8.0_251]
+	... 37 more
+Caused by: java.lang.SecurityException: class "net.minecraftforge.common.config.ConfigManager"'s signer information does not match signer information of other classes in the same package
+	at java.lang.ClassLoader.checkCerts(Unknown Source) ~[?:1.8.0_251]
+	at java.lang.ClassLoader.preDefineClass(Unknown Source) ~[?:1.8.0_251]
+	at java.lang.ClassLoader.defineClass(Unknown Source) ~[?:1.8.0_251]
+	at java.security.SecureClassLoader.defineClass(Unknown Source) ~[?:1.8.0_251]
+	at net.minecraft.launchwrapper.LaunchClassLoader.findClass(LaunchClassLoader.java:182) ~[launchwrapper-1.12.jar:?]
+	at java.lang.ClassLoader.loadClass(Unknown Source) ~[?:1.8.0_251]
+	at java.lang.ClassLoader.loadClass(Unknown Source) ~[?:1.8.0_251]
+	... 37 more
+[13:43:19] [Client thread/INFO] [STDOUT]: [net.minecraft.client.Minecraft:func_71377_b:349]: ---- Minecraft Crash Report ----
+// Hi. I'm Minecraft, and I'm a crashaholic.
+
+Time: 26-11-6 下午1:43
+Description: There was a severe problem during mod loading that has caused the game to fail
+
+cpw.mods.fml.common.LoaderException: java.lang.NoClassDefFoundError: net/minecraftforge/common/config/ConfigManager
+	at cpw.mods.fml.common.LoadController.transition(LoadController.java:163)
+	at cpw.mods.fml.common.Loader.preinitializeMods(Loader.java:559)
+	at cpw.mods.fml.client.FMLClientHandler.beginMinecraftLoading(FMLClientHandler.java:243)
+	at net.minecraft.client.Minecraft.func_71384_a(Minecraft.java:480)
+	at net.minecraft.client.Minecraft.func_99999_d(Minecraft.java:878)
+	at net.minecraft.client.main.Main.main(SourceFile:148)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135)
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28)
+Caused by: java.lang.NoClassDefFoundError: net/minecraftforge/common/config/ConfigManager
+	at tschipp.carryon.common.CommonProxy.preInit(CommonProxy.java:36)
+	at tschipp.carryon.client.ClientProxy.preInit(ClientProxy.java:14)
+	at tschipp.carryon.CarryOn.preInit(CarryOn.java:99)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at cpw.mods.fml.common.FMLModContainer.handleModStateEvent(FMLModContainer.java:532)
+	at sun.reflect.GeneratedMethodAccessor4.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at com.google.common.eventbus.EventSubscriber.handleEvent(EventSubscriber.java:74)
+	at com.google.common.eventbus.SynchronizedEventSubscriber.handleEvent(SynchronizedEventSubscriber.java:47)
+	at com.google.common.eventbus.EventBus.dispatch(EventBus.java:322)
+	at com.google.common.eventbus.EventBus.dispatchQueuedEvents(EventBus.java:304)
+	at com.google.common.eventbus.EventBus.post(EventBus.java:275)
+	at cpw.mods.fml.common.LoadController.sendEventToModContainer(LoadController.java:212)
+	at cpw.mods.fml.common.LoadController.propogateStateMessage(LoadController.java:190)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at com.google.common.eventbus.EventSubscriber.handleEvent(EventSubscriber.java:74)
+	at com.google.common.eventbus.SynchronizedEventSubscriber.handleEvent(SynchronizedEventSubscriber.java:47)
+	at com.google.common.eventbus.EventBus.dispatch(EventBus.java:322)
+	at com.google.common.eventbus.EventBus.dispatchQueuedEvents(EventBus.java:304)
+	at com.google.common.eventbus.EventBus.post(EventBus.java:275)
+	at cpw.mods.fml.common.LoadController.distributeStateMessage(LoadController.java:119)
+	at cpw.mods.fml.common.Loader.preinitializeMods(Loader.java:556)
+	... 10 more
+Caused by: java.lang.ClassNotFoundException: net.minecraftforge.common.config.ConfigManager
+	at net.minecraft.launchwrapper.LaunchClassLoader.findClass(LaunchClassLoader.java:101)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 39 more
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- System Details --
+Details:
+	Minecraft Version: 1.7.10
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 1.8.0_251, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 219303384 bytes (209 MB) / 536870912 bytes (512 MB) up to 6442450944 bytes (6144 MB)
+	JVM Flags: 10 total; -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump -Xmx6144m -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:G1HeapRegionSize=32M -XX:MaxGCPauseMillis=50 -XX:+PerfDisableSharedMem -XX:+ParallelRefProcEnabled
+	AABB Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	FML: MCP v9.05 FML v7.10.99.99 Minecraft Forge 10.13.4.1614 16 mods loaded, 16 mods active
+	States: 'U' = Unloaded 'L' = Loaded 'C' = Constructed 'H' = Pre-initialized 'I' = Initialized 'J' = Post-initialized 'A' = Available 'D' = Disabled 'E' = Errored
+	UCH	mcp{9.05} [Minecraft Coder Pack] (minecraft.jar) 
+	UCH	FML{7.10.99.99} [Forge Mod Loader] (forge-1.7.10-10.13.4.1614-1.7.10.jar) 
+	UCH	Forge{10.13.4.1614} [Minecraft Forge] (forge-1.7.10-10.13.4.1614-1.7.10.jar) 
+	UCH	GTNHLib Core{0.12.0} [GTNHLib Core] (minecraft.jar) 
+	UCH	unimixins{0.3.1} [UniMixins] (+unimixins-all-1.7.10-0.3.1.jar) 
+	UCH	unimixins-mixin{0.3.1} [UniMixins: Mixin (UniMix)] (+unimixins-all-1.7.10-0.3.1.jar) 
+	UCH	unimixins-compat{0.3.1} [UniMixins: Compatibility] (+unimixins-all-1.7.10-0.3.1.jar) 
+	UCH	mixingasm{0.3} [UniMixins: Mixingasm] (+unimixins-all-1.7.10-0.3.1.jar) 
+	UCH	spongemixins{2.0.1} [UniMixins: SpongeMixins] (+unimixins-all-1.7.10-0.3.1.jar) 
+	UCH	mixinbooterlegacy{1.2.1} [UniMixins: MixinBooterLegacy] (+unimixins-all-1.7.10-0.3.1.jar) 
+	UCH	gtnhmixins{2.2.0} [UniMixins: GTNHMixins] (+unimixins-all-1.7.10-0.3.1.jar) 
+	UCH	mixinextras{0.3.1} [UniMixins: MixinExtras] (+unimixins-all-1.7.10-0.3.1.jar) 
+	UCH	gtnhlib{0.12.0} [GTNH Lib] (gtnhlib-0.12.0.jar) 
+	UCH	backhand{1.8.17} [Backhand] (backhand-1.8.17.jar) 
+	UCE	backportapi{1.0.0} [BackportAPI] (backportapi-1.0.0.jar) 
+	UCE	carryonunoffical{1.0.3} [CarryOn-Unofficial] (carryon-1.0.3.jar) 
+	GL info: ' Vendor: 'NVIDIA Corporation' Version: '4.6.0 NVIDIA 572.83' Renderer: 'NVIDIA GeForce RTX 4050 Laptop GPU/PCIe/SSE2'
+	Mixins in Stacktrace: 
+		cpw.mods.fml.common.LoadController:
+			mixins.gtnhmixins.json:LateMixinOrchestrationMixin from mod (unknown)
+			mixin.mixinbooterlegacy.json:LoadControllerMixin from mod (unknown)
+		net.minecraft.client.Minecraft:
+			mixins.backhand.early.json:minecraft.MixinMinecraft from mod backhand
+			mixins.gtnhlib.early.json:MixinMinecraft_PickBlockTrap from mod gtnhlib
+[13:43:19] [Client thread/INFO] [STDOUT]: [net.minecraft.client.Minecraft:func_71377_b:359]: #@!@# Game crashed! Crash report saved to: #@!@# E:\Weapon And Magic\.minecraft\versions\1.7.10-Forge_10.13.4.1614\crash-reports\crash-2026-11-06_13.43.19-client.txt

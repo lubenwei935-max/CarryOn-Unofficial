@@ -1,0 +1,25 @@
+java.version      = 25.0.3
+java.home         = D:\Program Files (x86)\Java\jdk25+
+signed.jar        = file:/C:/Users/36039/WorkBuddy%20AI/2026-10-30-19-10-26/test/signature/build/signed.jar
+unsigned.jar      = file:/C:/Users/36039/WorkBuddy%20AI/2026-10-30-19-10-26/test/signature/build/unsigned.jar
+load order        = pkg.Signed -> pkg.Unsigned
+
+[1] loaded  pkg.Signed   signers=[1] X.509:CN=Signature Conflict Repro, O=BackportAPI Test
+    codeSource=file:/C:/Users/36039/WorkBuddy%20AI/2026-10-30-19-10-26/test/signature/build/signed.jar
+
+[2] java.lang.SecurityException: class "pkg.Unsigned"'s signer information does not match signer information of other classes in the same package
+
+java.lang.SecurityException: class "pkg.Unsigned"'s signer information does not match signer information of other classes in the same package
+	at java.base/java.lang.ClassLoader.checkCerts(ClassLoader.java:1107)
+	at java.base/java.lang.ClassLoader.preDefineClass(ClassLoader.java:854)
+	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:960)
+	at java.base/java.security.SecureClassLoader.defineClass(SecureClassLoader.java:144)
+	at java.base/java.net.URLClassLoader.defineClass(URLClassLoader.java:454)
+	at java.base/java.net.URLClassLoader.findClass(URLClassLoader.java:367)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:557)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:490)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:547)
+	at Repro.main(Repro.java:47)
+
+REPRO-OK

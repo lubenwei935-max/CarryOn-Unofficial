@@ -1,0 +1,23 @@
+== BackportAPI 包冲突护栏 ==
+产物     : C:/Users/36039/WorkBuddy AI/2026-10-30-19-10-26/backportapi/build/probe-jar.jar
+对照     : deps/forgebin.jar + deps/mcp.jar
+白名单   : backportapi/conf/known-conflicts.txt
+
+冲突包 7 个，落进去的类 20 个：
+  net.minecraft.client.renderer                 Mojang  1 个
+  net.minecraft.entity.player                   Mojang  1 个
+  net.minecraft.init                            Mojang  2 个
+  net.minecraft.util                            Mojang  6 个
+  net.minecraftforge.common.config              Forge   6 个
+  net.minecraftforge.event                      Forge   1 个
+  net.minecraftforge.event.entity.player        Forge   3 个
+
+!! 新增冲突类（不在白名单里）：
+   Mojang  net.minecraft.util.ProbeClass   （包 net.minecraft.util）
+
+   这些类会让游戏在 preInit 阶段抛 SecurityException（同包签名不一致）。
+   两条出路：
+     1) 换包名（如 net.backportapi.shim.xxx），调用方改 import；
+     2) 确认无解后，把它登记到 backportapi/conf/known-conflicts.txt，并说明为什么必须沿用原包名。
+
+结果：FAIL

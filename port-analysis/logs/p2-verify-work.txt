@@ -1,0 +1,45 @@
+未改写为 srg 的原版方法引用：5 条
+net/minecraft/entity/Entity.isCreatureType
+net/minecraft/entity/player/EntityPlayer.getEntityData
+net/minecraft/nbt/NBTBase.equals
+net/minecraft/nbt/NBTException.getMessage
+net/minecraft/nbt/NBTTagCompound.toString
+
+允许清单（Forge 附加方法，运行时保留原名）：
+  net/minecraft/entity/Entity.getEntityData
+  net/minecraft/entity/Entity.isCreatureType
+  net/minecraft/client/renderer/RenderBlocks.getInstance
+
+请逐条确认上面每一条都是 Forge 附加方法；若属于原版方法，
+说明映射缺失，必须改用 conf/mcp2srg.srg 中存在的名字。
+
+=== 字段引用检查（非 field_ 的原版字段） ===
+net/minecraft/entity/EnumCreatureType.monster
+net/minecraft/util/EnumFacing.DOWN
+字段条目数：2
+
+=== 字段引用检查（非 field_ 的原版字段） ===
+net/minecraft/entity/EnumCreatureType.monster
+net/minecraft/util/EnumFacing.DOWN
+字段条目数：2
+
+=== 包冲突护栏（BackportAPI）===
+== BackportAPI 包冲突护栏 ==
+产物     : E:/WM-test/p2/work-backportapi/build/backportapi-1.0.0.jar
+对照     : deps/forgebin.jar + deps/mcp.jar
+白名单   : backportapi/conf/known-conflicts.txt
+
+冲突包 7 个，落进去的类 17 个：
+  net.minecraft.client.renderer                 Mojang  1 个
+  net.minecraft.entity.player                   Mojang  1 个
+  net.minecraft.init                            Mojang  2 个
+  net.minecraft.util                            Mojang  4 个
+  net.minecraftforge.common.config              Forge   5 个
+  net.minecraftforge.event                      Forge   1 个
+  net.minecraftforge.event.entity.player        Forge   3 个
+
+提示：白名单里有 2 个类已不在产物中，可以把它们从 known-conflicts.txt 删掉（可收紧）：
+   net.minecraft.util.EnumHand
+   net.minecraftforge.common.config.ConfigManager
+
+结果：PASS（17 个冲突类全部在白名单内，无新增）

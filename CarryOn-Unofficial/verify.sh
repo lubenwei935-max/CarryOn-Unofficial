@@ -17,7 +17,7 @@ set -euo pipefail
 
 JAR="${1:-build/carryon-1.0.0.jar}"
 TMP=$(mktemp -d)
-trap 'rm -rf "$TMP"' EXIT
+trap 'rm -rf "$TMP" 2>/dev/null || true' EXIT
 
 cd "$(dirname "$0")"
 unzip -o -q "$JAR" -d "$TMP"

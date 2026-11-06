@@ -161,11 +161,11 @@ world.setBlockMetadataWithNotify(x, y, z, i1, 3);    // 无条件写
 
 | 场景 | 实现 |
 |---|---|
-| 第一人称 | `RenderHandEvent` 里 `glLoadIdentity()` 后按**相机空间**画；物品本体由 `HideHeldItem` 隐藏，原版手臂照常保留 |
+| 第一人称 | `RenderHandEvent` 里 `glLoadIdentity()` 后按**相机空间**画；物品本体由 `HideHeldItem` 隐藏，事件末尾 `setCanceled(true)` 把原版手臂一并跳过 |
 | 第三人称 | `RenderPlayerEvent.Post` 里，用 `玩家插值坐标 - RenderManager.renderPos` 平移（再减 `yOffset` 落到脚底）——和原版 `renderLivingAt` 同一组数 |
 | 方块本体 | `RenderBlocks.renderBlockAsItem(block, meta, 1.0F)` |
 | 生物本体 | `RenderManager.getEntityRenderObject(entity).doRender(...)` |
-| 手臂 | `RenderPlayerEvent.Pre/Post` 里切换 `ModelRenderer.showModel` |
+| 手臂 | 仅第三人称：`RenderPlayerEvent.Pre/Post` 里切换 `ModelRenderer.showModel` |
 
 ### 三次踩坑的教训：不要自己猜相机
 
@@ -187,6 +187,47 @@ world.setBlockMetadataWithNotify(x, y, z, i1, 3);    // 无条件写
 OpenGL 右乘，`glScalef(s); glTranslatef(t)` 的实际偏移是 `s*t`。
 把"世界单位"的平移量写在 scale 之后会被放大 `s` 倍（1.0.8 那版箱子又远又小就是这个）。
 现在统一 `glTranslatef → glScalef`。
+
+### 第一人称不画手臂
+
+搬运方块时会看到右下角露出一条手臂——抱的是大箱子时被模型挡住，抱水晶箱、节点稳定器这类
+体积小的东西就露出来了。这份手臂不是模组自己画的（1.0.1 里画过一份，已经删掉），而是
+**原版照常绘制的右手**。
+
+1.7.10 的调用链是这样：
+
+```java
+// EntityRenderer.renderWorld
+if (!ForgeHooksClient.renderFirstPersonHand(renderGlobal, partialTicks, pass)
+        && this.cameraZoom == 1.0D)
+{
+    glClear(GL_DEPTH_BUFFER_BIT);
+    renderHand(partialTicks, pass);          // → ItemRenderer.renderItemInFirstPerson
+}
+```
+
+```java
+// ItemRenderer.renderItemInFirstPerson（简化）
+... bindTexture(player.getLocationSkin());
+this.renderPlayerArm(player);                // ← 无条件，就是这条手臂
+... 再按 itemToRender 分派给物品渲染器     // ← HideHeldItem 只把这一段变成空操作
+```
+
+也就是说 **手臂和手持物是两段独立的绘制**，`HideHeldItem`（注册一个空的 `IItemRenderer`）
+只能让手持物不画，管不到手臂。1.7.10 也没有 `RenderHandEvent` 之外的开关，`showModel`
+只在第三人称的 `RenderPlayerEvent` 路径上有效。
+
+所以做法是：在 `RenderHandEvent` 里画完搬运物后 `event.setCanceled(true)`。
+`renderFirstPersonHand()` 只是 `EVENT_BUS.post(new RenderHandEvent(...))` 的返回值，
+取消后上面那个 `if` 直接跳过整段 `renderHand()`——手臂、手持物（本来已被隐藏）、
+FOV 切换、视角晃动全部不再执行，第一人称完全由本模组接管。
+
+两个必须自己补齐的副作用：
+
+- **深度清理**：原版那次 `glClear(GL_DEPTH_BUFFER_BIT)` 就在被跳过的分支里，
+  事件里必须自己清一次，否则贴墙站时手里的东西会被墙挡住。
+- **投影**：原来由 `renderHand()` 换成固定 70°，现在得自己 `glLoadIdentity()` +
+  手算透视矩阵（`applyPerspective`），否则玩家把 FOV 拉到 110° 时搬运物会小一半。
 
 ### 数值对齐上游 1.12.2
 
@@ -522,6 +563,8 @@ export JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot"
    既不该出现方块图标，也不该出现"别的物品"的图标。
 7. **抱起时锁背包**：手上有搬运物时按 E（以及创造模式背包键）应毫无反应；
    放下之后能正常打开。
+8. **第一人称没有手臂**：搬起体积小的方块（水晶箱、节点稳定器）时，屏幕右下角不应再出现手臂；
+   放下后空手、手持普通物品时手臂都恢复正常（事件只在 `isCarried` 为真时取消）。
 
 ---
 
@@ -530,6 +573,17 @@ export JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot"
 > 版本号按发布批次编号，不严格单调。1.0.4 / 1.0.5 是开发期的内部迭代号，已并入下面的 1.0.1。
 
 ### 1.0.1
+
+- **fix: 第一人称不再渲染手臂。**
+  原版 `ItemRenderer.renderItemInFirstPerson` 里手臂是无条件绘制的
+  （`RenderPlayer.renderFirstPersonArm` 只画 `bipedRightArm`），`HideHeldItem` 只能把
+  手持物换成空操作、管不到手臂。搬运物体积大时被模型挡住看不见，体积小（水晶箱、
+  节点稳定器等）就在右下角露出一条手臂。现在 `RenderHandEvent` 里画完搬运物后
+  `setCanceled(true)`，`EntityRenderer.renderWorld` 整段跳过 `renderHand()`，
+  手臂随手持物一起消失。深度清理与 70° 投影改由本模组自己补
+  （原版那次 `glClear` 也在被跳过的分支里）。
+  同时删掉了早先为"补一只手"而写的 `renderFirstPersonArm`（照抄原版空手分支的
+  那份变换），第一人称只剩搬运物本体。
 
 - **change: 搬起改为「潜行 + 右键」，不再占用独立按键。**
   上游本来就是蹲下触发；移植版早先用 `Keyboard.KEY_LSHIFT` 的 `KeyBinding`，再由客户端 tick

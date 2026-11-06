@@ -8,19 +8,20 @@
 
 | 模块 | 说明 | 产物 |
 |---|---|---|
-| `backportapi/` | 1.8+ API 回填库：`BlockPos` / `IBlockState` / `EnumHand` / `GlStateManager` / `Capability` / `@Config` / `RenderTarget` … | `backportapi-1.0.0.jar` |
-| `CarryOn-Unofficial/` | Carry On 本体（搬运方块与生物） | `carryon-1.0.0.jar` |
+| `backportapi/` | 1.8+ API 回填库：`BlockPos` / `IBlockState` / `EnumHand` / `GlStateManager` / `Capability` / `@Config` / `RenderTarget` … | `backportapi-1.1.0.jar` |
+| `CarryOn-Unofficial/` | Carry On 本体（搬运方块与生物） | `CarryOn-Unoffcial-1.0.1.jar` |
 | `port-analysis/` | 移植前的可行性分析报告 | — |
 
 - **MC**：1.7.10
 - **前置**：Forge 10.13.4.1614 + BackportAPI（Backhand 提供副手，可选）
 - **许可证**：LGPL-3.0（衍生自上游 Carry On）
+- **版本变化**：见 [CHANGELOG.md](CHANGELOG.md)
 
 ---
 
 ## 玩法
 
-空手（主手）按 **Shift + 右键** 搬起方块或生物，再次右键放下。
+空手（主手）**潜行 + 右键** 搬起方块或生物，松开潜行后再右键放下。
 
 - 搬运中无法攻击、挖掘、丢弃、切换物品栏、打开背包、打开容器
 - 搬运物越重（NBT 越大 / 体型越大）移动越慢

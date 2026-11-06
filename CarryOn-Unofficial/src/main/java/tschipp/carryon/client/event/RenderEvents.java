@@ -51,6 +51,26 @@ import tschipp.carryon.common.item.ItemTile;
  * 之前把"世界单位"的平移量写在 scale 之后，结果被放大了 2.5 倍（箱子又远又小）。
  * 现在统一 {@code glTranslatef → glScalef}，平移量就是世界单位。
  *
+ * <h3>第一人称：不画手臂，靠取消 RenderHandEvent 实现</h3>
+ * 1.7.10 的 {@code EntityRenderer.renderWorld} 是这样写的：
+ * <pre>
+ * if (!ForgeHooksClient.renderFirstPersonHand(renderGlobal, partialTicks, pass)
+ *         &amp;&amp; this.cameraZoom == 1.0D)
+ * {
+ *     glClear(GL_DEPTH_BUFFER_BIT);
+ *     renderHand(partialTicks, pass);      // → ItemRenderer.renderItemInFirstPerson
+ * }
+ * </pre>
+ * 而 {@code renderItemInFirstPerson} 里<b>手臂是无条件画的</b>（先 bind 皮肤 +
+ * {@code renderPlayerArm}，再交给物品渲染器画手持物），没有任何 API 能只关掉手臂。
+ * 所以搬运时在事件里画完自己的方块/生物之后直接 {@code setCanceled(true)}：
+ * renderHand 整段不执行，手臂和那个已经被 {@code HideHeldItem} 换成空操作的
+ * 手持物一起消失。深度清理由我们自己补（{@code glClear(GL_DEPTH_BUFFER_BIT)}），
+ * 因为原版那次 clear 也在被跳过的分支里。
+ *
+ * <p>不要试图用 {@code ModelRenderer.showModel = false}：那只在第三人称的
+ * {@code RenderPlayerEvent} 里有效，第一人称的手臂绘制不走那条路径。
+ *
  * <h3>数值来自上游 1.12.2</h3>
  * 方块第一人称 {@code scale(2.5)} + 等效世界偏移 {@code (0,-1.5,-2.5)}；
  * 方块第三人称 {@code scale(0.6)} + {@code (0, 0.96, ±0.39)}；
@@ -106,7 +126,7 @@ public class RenderEvents
 			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
 			if (isBlock(stack))
-				renderHandBlock(mc, player, stack, event.partialTicks);
+				renderHandBlock(mc, player, stack);
 			else
 				renderHandEntity(player, stack, event.partialTicks);
 
@@ -119,6 +139,12 @@ public class RenderEvents
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glPopMatrix();
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+
+			// 搬运时第一人称完全由本方法接管：取消事件后，EntityRenderer.renderWorld
+			// 就不再调用 renderHand()，原版那只右手（RenderPlayer.renderFirstPersonArm）
+			// 连同手持物一起被跳过。手臂原本是“物品大时被挡住、物品小时露出来”，
+			// 只有取消整段渲染才能彻底去掉，单靠隐藏模型/贴图都做不到。
+			event.setCanceled(true);
 		}
 		catch (Throwable t)
 		{
@@ -126,7 +152,7 @@ public class RenderEvents
 		}
 	}
 
-	private void renderHandBlock(Minecraft mc, EntityPlayer player, ItemStack stack, float partial)
+	private void renderHandBlock(Minecraft mc, EntityPlayer player, ItemStack stack)
 	{
 		RenderHelper.enableStandardItemLighting();
 		applyLighting(player);
@@ -165,49 +191,6 @@ public class RenderEvents
 		drawBlock(stack, player);
 
 		RenderHelper.disableStandardItemLighting();
-
-		// 原版只有在<b>空手</b>时才会画第一人称手臂（ItemRenderer 的 else 分支），
-		// 我们把手持物换成了自己的渲染，那条分支永远走不到，所以这里自己补一只手，
-		// 变换照抄原版空手分支，位置就在右下角。
-		renderFirstPersonArm(mc, player, partial);
-	}
-
-	/** 第一人称手臂：完全照搬原版 {@code ItemRenderer} 空手分支的变换。 */
-	private void renderFirstPersonArm(Minecraft mc, EntityPlayer player, float partial)
-	{
-		Render render = RenderManager.instance.getEntityRenderObject(player);
-		if (!(render instanceof net.minecraft.client.renderer.entity.RenderPlayer))
-			return;
-
-		net.minecraft.client.renderer.entity.RenderPlayer renderPlayer = (net.minecraft.client.renderer.entity.RenderPlayer) render;
-
-		float swing = player.getSwingProgress(partial);
-		float s1 = MathHelper.sin(swing * (float) Math.PI);
-		float s2 = MathHelper.sin(MathHelper.sqrt_float(swing) * (float) Math.PI);
-		float s3 = MathHelper.sin(swing * swing * (float) Math.PI);
-
-		GL11.glPushMatrix();
-
-		GL11.glTranslatef(-s2 * 0.3F, MathHelper.sin(MathHelper.sqrt_float(swing) * (float) Math.PI * 2.0F) * 0.4F, -s1 * 0.4F);
-		GL11.glTranslatef(0.8F * 0.8F, -0.75F * 0.8F, -0.9F * 0.8F);
-		GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(s2 * 70.0F, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(-s3 * 20.0F, 0.0F, 0.0F, 1.0F);
-
-		if (player instanceof net.minecraft.client.entity.AbstractClientPlayer)
-			mc.getTextureManager().bindTexture(((net.minecraft.client.entity.AbstractClientPlayer) player).getLocationSkin());
-
-		GL11.glTranslatef(-1.0F, 3.6F, 3.5F);
-		GL11.glRotatef(120.0F, 0.0F, 0.0F, 1.0F);
-		GL11.glRotatef(200.0F, 1.0F, 0.0F, 0.0F);
-		GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-		GL11.glTranslatef(5.6F, 0.0F, 0.0F);
-
-		// 手臂被 RenderEntityEvents 在第三人称里隐藏过，这里确保是显示状态
-		renderPlayer.modelBipedMain.bipedRightArm.showModel = true;
-		renderPlayer.renderFirstPersonArm(player);
-
-		GL11.glPopMatrix();
 	}
 
 	private void renderHandEntity(EntityPlayer player, ItemStack stack, float partial)

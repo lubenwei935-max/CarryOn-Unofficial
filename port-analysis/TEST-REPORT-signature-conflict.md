@@ -1,6 +1,8 @@
 # 签名冲突专项测试报告（test/signature-conflict）
 
-**分支**：`test/signature-conflict`（基线 `5311559`，`CarryOn.VERSION` = 1.0.3；**不合并回主干**）
+**分支**：`test/signature-conflict`（基线 `5311559`，`CarryOn.VERSION` = 1.0.3）
+**合并状态**：任务单原定"不合并回主干"，**经委托方 2026-11-06 14:31 明确指示后已合并入 `main`**
+（合并提交见 §8；分支本身保留，未删除）
 **被测对象**：`CarryOn-Unofficial` 1.0.3 + 前置 `BackportAPI` 1.0.0
 **沙箱实例**：`E:\WM-test\.minecraft`（从 `E:\Weapon And Magic\.minecraft` 复制，原件全程只读）
 **测试时间**：2026-11-06 13:52 – 14:30（GMT+8）
@@ -423,7 +425,10 @@ PCL / HMCL 的"修复文件/完整性检查"会重新下载被改过的 jar。�
 
 ---
 
-## 7. 给主干的建议（只写建议，不改主干）
+## 7. 给主干的建议
+
+> 本节写于测试分支期间。**分支合并后，第 2、3、4 条已经随合并落地**；
+> 第 1、5、6 条仍是需要人拍板的决策（尤其是要不要在发布流程里固化"去签名 + 加参数"）。
 
 1. **发布路径走 A，不要动代码。** 附一个 `desig` 脚本 + 一句 JVM 参数，比迁 19 个类划算得多。
 2. **README 的两处更正建议单独提 PR 进主干**：
@@ -461,7 +466,11 @@ abd57fa test: P0 离线复现同包签名冲突
 a8a5d82 test: P1 沙箱去签名实测通过
 8ddc2a5 test: P3 包冲突护栏
 72c6d98 test: P2 包迁移切片实测（2 个类，仍不足）
+777c016 test: P4 报告 + 真实 jar 对照实验
 ```
 
-分支未合并；`git log --oneline test/signature-conflict` 可复现上述顺序。
+合并方式：`git merge --no-ff test/signature-conflict`（保留一条合并提交，方便整体回滚）。
+合并进主干的只有脚本、文档与日志——**没有任何 jar、class、`deps/` 内容或游戏文件**；
+P2 的包迁移实验全程在 `E:\WM-test\p2` 的独立副本里做，未进入工作区。
+`git log --oneline test/signature-conflict` 可复现上述顺序。
 `E:\Weapon And Magic`（真实实例）全程只读，未做任何写操作。

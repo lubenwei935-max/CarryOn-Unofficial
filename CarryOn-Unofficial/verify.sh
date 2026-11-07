@@ -12,10 +12,11 @@
 #   - net/backportapi、net/minecraft/util/math 等本工程自带类 -> 安全
 #   - java/lang、java/util 等 JDK 类 -> 安全
 #   - 其余 net/minecraft 下的非 func_ 方法 -> 需人工确认
-#     （只有 Forge 附加方法才允许保留原名，如 getEntityData / getInstance / isCreatureType）
+#     （只有 Forge 附加方法才允许保留原名，如 getEntityData / getInstance /
+#      isCreatureType / canRenderInPass；它们不在原版 jar 里，mcp2srg.srg 也没有对应映射）
 set -euo pipefail
 
-JAR="${1:-build/carryon-1.0.0.jar}"
+JAR="${1:-build/carryon-1.0.2.jar}"
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
 
@@ -41,6 +42,7 @@ echo "允许清单（Forge 附加方法，运行时保留原名）："
 echo "  net/minecraft/entity/Entity.getEntityData"
 echo "  net/minecraft/entity/Entity.isCreatureType"
 echo "  net/minecraft/client/renderer/RenderBlocks.getInstance"
+echo "  net/minecraft/block/Block.canRenderInPass"
 
 if [ "$COUNT" -gt 0 ]; then
   echo ""

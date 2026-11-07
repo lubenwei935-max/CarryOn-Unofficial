@@ -51,7 +51,7 @@ public class CarryOn
 	public static final String MODID = "carryonunoffical";
 
 	/** 移植版自己的版本号，与 mcmod.info 保持一致（上游是 1.9.1）。 */
-	public static final String VERSION = "1.0.1";
+	public static final String VERSION = "1.0.2";
 
 	public static final String NAME = "CarryOn-Unofficial";
 	public static final String ACCEPTED_VERSIONS = "[1.7.10]";

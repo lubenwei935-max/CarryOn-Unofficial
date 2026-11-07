@@ -4,7 +4,7 @@
 移植：基于 **BackportAPI**（提供 BlockPos / IBlockState / EnumHand / GlStateManager / Capability / @Config）
 
 - **modid**: `carryonunoffical`
-- **版本**: 1.0.1
+- **版本**: 1.0.2
 - **MC**: 1.7.10
 - **硬前置**: Forge 1.7.10 + **BackportAPI**
 - **软前置**: Backhand（提供副手，可选）
@@ -495,8 +495,8 @@ java.lang.NoSuchMethodError: 'int net.minecraft.item.ItemStack.getItemDamage()'
 `verify.sh` 会在构建后静态扫描整个 jar，列出所有未被改写的原版方法/字段引用：
 
 ```bash
-./build.sh 1.0.0
-./verify.sh build/carryon-1.0.0.jar
+./build.sh 1.0.2
+./verify.sh build/carryon-1.0.2.jar
 ```
 
 期望输出只有上面那 7 条（3 个 Forge 方法 + 4 个 Object 方法）。
@@ -539,8 +539,8 @@ MD: net/minecraft/block/Block/hasTileEntity ()Z  net/minecraft/block/Block/func_
 
 ```bash
 export JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot"
-./build.sh 1.0.0
-# 产物: build/carryon-1.0.0.jar
+./build.sh 1.0.2
+# 产物: build/carryon-1.0.2.jar
 ```
 
 依赖 `deps/backportapi-1.1.0.jar`（编译期）。运行期需要 mods 目录里同时存在 BackportAPI 1.1.0。
@@ -570,7 +570,24 @@ export JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot"
 
 ## 变更记录
 
-> 版本号按发布批次编号，不严格单调。1.0.4 / 1.0.5 是开发期的内部迭代号，已并入下面的 1.0.1。
+> 版本号按发布批次编号，不严格单调。1.0.4 / 1.0.5 是开发期的内部迭代号，已并入 1.0.1；
+> 当前发布版本为 **1.0.2**（前置仍为 BackportAPI **1.1.0**，与早期回撤的 1.0.2 / 前置 1.2.0 无关）。
+
+### 1.0.2
+
+把 1.0.1 基线之后的三项**通用兼容性修复**正式发布为一个版本，完整说明见 [CHANGELOG.md](../CHANGELOG.md)：
+
+- **fix1 物品形态兜底**：拾取时记录可选的 `itemForm`，仅在名字出现 `tile.*` / `item.*` 裸键、
+  或 `renderBlockAsItem` 画出零顶点时启用，解决「第一人称不渲染 + 显示未翻译键」。
+- **fix2 3D 模型优先**：新增 `CustomBlockModel`，在手持渲染里调用 `RenderingRegistry.renderWorldBlock`
+  复现世界几何（pass 0/1），2D 图标只作最后兜底；完整保存/恢复 `RenderBlocks` 单例状态。
+- **fix3 通用放置朝向语义**：新增 `PlacementPolicy` + `ItemPlacementSemantics`，用影子
+  `ItemStack` 在快照上跑一次 `onItemUse` 推断 meta，随后无条件回滚；不识别任何 modid，
+  只按「物品是否自定义放置、探针能否可复现地写出合法且变化的 meta」决策。
+- 新增三个开关 `itemFormFallback` / `itemForm3DModel` / `itemPlacementSemantics`（默认 true），
+  各自可一键退回上一阶段行为；`BackportAPI 1.1.0` 未改动。
+- 验证：`verify.sh` 零新增未映射引用，`tests/run_tests.sh` 113983 条断言全通过；
+  交付 `build/CarryOn-Unoffcial-1.0.2.jar`。游戏内实测仍需在本机完成。
 
 ### 1.0.1
 

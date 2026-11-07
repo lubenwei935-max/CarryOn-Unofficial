@@ -3,6 +3,7 @@ package tschipp.carryon.client.event;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -24,6 +25,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import tschipp.carryon.client.render.CustomBlockModel;
+import tschipp.carryon.client.render.SpriteFallback;
 import tschipp.carryon.common.config.Configs;
 import tschipp.carryon.common.handler.ModelOverridesHandler;
 import tschipp.carryon.common.handler.RegistrationHandler;
@@ -365,16 +368,63 @@ public class RenderEvents
 	{
 		RenderTarget target = ModelOverridesHandler.getRenderTarget(ItemTile.getBlockState(stack), ItemTile.getTileData(stack));
 
+		// 模型覆盖是显式指定的，优先级最高，不参与兼容性回退。
 		if (target == null)
 		{
 			Block block = ItemTile.getBlock(stack);
 			if (block == null)
 				return;
-			target = RenderTargets.ofBlock(block, ItemTile.getMeta(stack));
+
+			int meta = ItemTile.getMeta(stack);
+
+			if (Configs.Settings.itemFormFallback && needsCustomModel(block))
+			{
+				// ① 先用模组自己的世界渲染器画真正的 3D 模型。只有它接手且确实
+				//    产出了顶点才算成功；失败/异常自动落到 ②，绝不回到"隐形"。
+				if (Configs.Settings.itemForm3DModel && CustomBlockModel.render(block, meta))
+					return;
+
+				// ② 2D 图标兜底：这些方块在物品栏里本来就是这个样子。
+				ItemStack form = ItemTile.getItemFormStack(stack);
+				if (form == null)
+					form = new ItemStack(block, 1, meta); // 老物品：退到方块自己的物品图标
+
+				if (form.getItem() != null && form.getIconIndex() != null)
+					target = new SpriteFallback(form);
+			}
+
+			if (target == null)
+				target = RenderTargets.ofBlock(block, meta);
 		}
 
 		if (target != null)
 			target.render(1.0F);
+	}
+
+	/**
+	 * 通用判定：这个方块有没有「内建的 3D 物品模型」。
+	 *
+	 * <p>0..41 是 RenderBlocks 内建的渲染类型，保持原路径不动。从 42 起是
+	 * RenderingRegistry 分配给 ISimpleBlockRenderingHandler 的 id；
+	 * Forge 的 renderItemAsFull3DBlock 会问该 handler 的
+	 * shouldRender3DInInventory —— 返回 false（或压根没注册 handler）就说明
+	 * renderBlockAsItem 只会落进空实现、零顶点。这是「方块 / 物品解耦注册」
+	 * 模组的通用特征，不需要认识任何一个 modid。命中后先尝试用世界渲染器画
+	 * 3D 模型（{@link CustomBlockModel}），再退到 2D 图标。
+	 */
+	private static boolean needsCustomModel(Block block)
+	{
+		try
+		{
+			int type = block.getRenderType();
+			if (type < 42)
+				return false;
+			return !RenderingRegistry.instance().renderItemAsFull3DBlock(type);
+		}
+		catch (Throwable t)
+		{
+			return false;
+		}
 	}
 
 	/** 让搬运中的生物面朝正前方、站在玩家身上（上游也是这么做的）。 */

@@ -9,7 +9,7 @@
 | 模块 | 说明 | 产物 |
 |---|---|---|
 | `backportapi/` | 1.8+ API 回填库：`BlockPos` / `IBlockState` / `EnumHand` / `GlStateManager` / `Capability` / `@Config` / `RenderTarget` … | `backportapi-1.1.0.jar` |
-| `CarryOn-Unofficial/` | Carry On 本体（搬运方块与生物） | `CarryOn-Unoffcial-1.0.1.jar` |
+| `CarryOn-Unofficial/` | Carry On 本体（搬运方块与生物） | `CarryOn-Unoffcial-1.0.2.jar` |
 | `port-analysis/` | 移植前的可行性分析报告 | — |
 
 - **MC**：1.7.10
@@ -59,17 +59,17 @@ javac（MCP 名）→ jar → SpecialSource 重混淆（mcp2srg）→ 打包
 ```bash
 export JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot"
 
-cd backportapi  && ./build.sh 1.0.0     # 产物 build/backportapi-1.0.0.jar
+cd backportapi  && ./build.sh 1.1.0     # 产物 build/backportapi-1.1.0.jar
 cd ../CarryOn-Unofficial
-cp ../backportapi/build/backportapi-1.0.0.jar deps/   # 模组编译期要引用前置
-./build.sh 1.0.0                        # 产物 build/carryon-1.0.0.jar
-./verify.sh build/carryon-1.0.0.jar     # 必跑，见下
+cp ../backportapi/build/backportapi-1.1.0.jar deps/   # 模组编译期要引用前置
+./build.sh 1.0.2                        # 产物 build/carryon-1.0.2.jar
+./verify.sh build/carryon-1.0.2.jar     # 必跑，见下
 ```
 
 ### 准备依赖
 
 `deps/` 不入库（约 32MB，且是 Mojang / Forge 的再分发受限产物），需要自己放进去。
-两个工程各有一个 `deps/`，内容相同；`CarryOn-Unofficial/deps/` 额外需要上一节构建出的 `backportapi-1.0.0.jar`。
+两个工程各有一个 `deps/`，内容相同；`CarryOn-Unofficial/deps/` 额外需要上一节构建出的 `backportapi-1.1.0.jar`。
 
 | 文件 | 来源 |
 |---|---|

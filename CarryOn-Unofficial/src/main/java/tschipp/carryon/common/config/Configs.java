@@ -75,6 +75,15 @@ public class Configs
 		@Config.Comment("Use custom Pickup Scripts. Having this set to false, will not allow you to run scripts, but will save you some performance")
 		public static boolean useScripts = false;
 
+		@Config.Comment("Fallback to a block's own item form when a mod has no 3D inventory model or no translated tile name")
+		public static boolean itemFormFallback = true;
+
+		@Config.Comment("Render the real 3D model of custom-render blocks using their world renderer. Falls back to the 2D icon if that fails. Set false to force icons only.")
+		public static boolean itemForm3DModel = true;
+
+		@Config.Comment("Let a block's own placement item decide its facing metadata (generic, works for any mod). Set false to keep the picked-up metadata.")
+		public static boolean itemPlacementSemantics = true;
+
 		@Config.Comment("Allows entities to be stacked using Carry On")
 		public static boolean stackableEntities = true;
 

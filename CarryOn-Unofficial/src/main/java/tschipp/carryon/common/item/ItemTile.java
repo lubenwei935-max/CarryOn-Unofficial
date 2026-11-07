@@ -17,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
@@ -37,7 +38,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import tschipp.carryon.CarryOn;
 import tschipp.carryon.common.config.Configs;
+import tschipp.carryon.common.handler.ItemPlacementSemantics;
 import tschipp.carryon.common.handler.ModelOverridesHandler;
+import tschipp.carryon.common.handler.PlacementPolicy;
 import tschipp.carryon.common.handler.PostPlaceRotators;
 import tschipp.carryon.network.client.CarrySlotPacket;
 
@@ -49,6 +52,18 @@ import tschipp.carryon.network.client.CarrySlotPacket;
 public class ItemTile extends Item
 {
 	public static final String TILE_DATA_KEY = "tileData";
+
+	/**
+	 * 可选的「物品形态」：这个方块在物品栏里真正对应的 Item 的注册名。
+	 *
+	 * <p>1.7.10 不少模组把方块与物品解耦注册：方块自己只有世界渲染器，
+	 * 名字、图标都挂在一个独立的 Item 上。只靠 {@code Item.getItemFromBlock}
+	 * 会拿回 FML 自动生成的默认 ItemBlock —— 名字查不到翻译、图标也不是玩家
+	 * 实际看到的那张。拾取时顺手记下它，供取名 / 渲染的兜底路径使用。
+	 *
+	 * <p>字段是可选的：老物品（本字段不存在）会自动走原来的逻辑。
+	 */
+	public static final String ITEM_FORM_KEY = "itemForm";
 
 	/**
 	 * 缓存的"重量"（0~4），决定移动减速等级。
@@ -105,9 +120,36 @@ public class ItemTile extends Item
 
 			ItemStack istack = getItemStack(stack);
 			if (istack != null)
-				return istack.getDisplayName();
+			{
+				String name = istack.getDisplayName();
+
+				// 通用兜底：只在这一步拿到「没翻译的裸键」时才换用物品形态的名字。
+				// 判定不依赖任何 modid：StatCollector 查不到键时会原样回显，
+				// 而 1.7.10 的方块 / 物品键固定是 tile.* / item.* 且不含空格。
+				if (Configs.Settings.itemFormFallback && looksUntranslated(name))
+				{
+					ItemStack form = getItemFormStack(stack);
+					if (form != null)
+					{
+						String alt = form.getDisplayName();
+						if (!looksUntranslated(alt))
+							return alt;
+					}
+				}
+				return name;
+			}
 		}
 		return "";
+	}
+
+	/** 判断显示名是否其实是 StatCollector 回显的原始本地化键。 */
+	private static boolean looksUntranslated(String name)
+	{
+		if (name == null || name.isEmpty())
+			return true;
+		if (!name.startsWith("tile.") && !name.startsWith("item."))
+			return false;
+		return name.indexOf(' ') < 0;
 	}
 
 	/**
@@ -180,6 +222,23 @@ public class ItemTile extends Item
 							placedState = containedstate.withProperty((IProperty) prop, Facing.getOpposite(facing2));
 							set = true;
 						}
+					}
+
+					// 放置语义推断：让模组自己的放置 Item 决定朝向。
+					//
+					// 1.7.10 没有属性系统，很多模组把「按玩家朝向算 meta」写在独立 Item 的
+					// onItemUse 里；CarryOn 直接 setBlock 绕过了这一层，只能放回旧 meta。
+					// 这里不登记任何 modid / meta 表，而是让该 Item 在受控探针里跑一次，
+					// 读出它写出的 meta 后完整回滚；最终世界状态仍由下面的原有流程产生，
+					// 所以 TE 数据、通知、网络包、后续回调一律不变。
+					// 属性路径已给出更权威结果时不覆盖（例如原版 / 模组楼梯）。
+					if (!set)
+					{
+						int inferred = ItemPlacementSemantics.inferPlacementMeta(stack, containedblock,
+								containedstate.getMeta(), player, world,
+								pos2.getX(), pos2.getY(), pos2.getZ(), side);
+						if (inferred != PlacementPolicy.NO_META)
+							placedState = BlockState.of(containedblock, inferred);
 					}
 
 					// ① 先放进世界。
@@ -344,6 +403,26 @@ public class ItemTile extends Item
 		tag.setInteger("meta", dropMeta);
 		tag.setInteger("stateid", BlockStates.getStateId(state));
 		tag.setInteger(WEIGHT_KEY, computeWeight(chest));
+
+		// 记录物品形态。getItemDropped 是纯查询（不需要 MovingObjectPosition / 客户端），
+		// 解耦注册的模组在这里返回的正是玩家物品栏里那个独立 Item。
+		// 这条信息只用于「原路径失败时」的兜底，原版方块有翻译名、有内建
+		// renderType，存了也不会被用到。任何异常都吞掉，绝不影响搬起。
+		try
+		{
+			Item form = block.getItemDropped(meta, new java.util.Random(), 0);
+			if (form != null)
+			{
+				String key = Item.itemRegistry.getNameForObject(form);
+				if (key != null && !key.isEmpty())
+					tag.setString(ITEM_FORM_KEY, key);
+			}
+		}
+		catch (Throwable t)
+		{
+			// optional metadata only
+		}
+
 		stack.setTagCompound(tag);
 		return true;
 	}
@@ -370,6 +449,7 @@ public class ItemTile extends Item
 			tag.removeTag("meta");
 			tag.removeTag("stateid");
 			tag.removeTag(WEIGHT_KEY);
+			tag.removeTag(ITEM_FORM_KEY);
 		}
 	}
 
@@ -408,6 +488,33 @@ public class ItemTile extends Item
 			return null;
 
 		return new ItemStack(item, 1, getMeta(stack));
+	}
+
+	/**
+	 * 还原拾取时记下的「物品形态」。老物品、字段缺失、注册名失效时都返回 null，
+	 * 调用方据此退回原行为。
+	 */
+	public static ItemStack getItemFormStack(ItemStack stack)
+	{
+		if (stack == null || !stack.hasTagCompound())
+			return null;
+
+		try
+		{
+			String name = stack.getTagCompound().getString(ITEM_FORM_KEY);
+			if (name == null || name.isEmpty())
+				return null;
+
+			Object obj = Item.itemRegistry.getObject(name);
+			if (!(obj instanceof Item))
+				return null;
+
+			return new ItemStack((Item) obj, 1, getMeta(stack));
+		}
+		catch (Throwable t)
+		{
+			return null;
+		}
 	}
 
 	public static IBlockState getBlockState(ItemStack stack)

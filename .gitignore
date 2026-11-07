@@ -12,6 +12,9 @@ build/
 .workbuddy-ai/
 *.log
 
+# ---- 从 GitHub 取回的干净旧版本基线（独立工作副本）----
+upstream-old/
+
 # ---- 移植分析用的参考材料 ----
 # 含上游仓库 clone、Forge/MCP 的 jar 与解包产物，体积约 24MB。
 # 只保留分析报告本身。

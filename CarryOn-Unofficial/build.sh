@@ -4,7 +4,7 @@
 #   1. javac (MCP names)                            -> build/classes
 #   2. jar                                          -> build/classes-mcp.jar
 #   3. SpecialSource reobf (mcp2srg + inheritance)  -> build/classes-srg.jar
-#   4. package                                      -> build/backportapi-<version>.jar
+#   4. package                                      -> build/carryon-<version>.jar
 #
 # Usage:  ./build.sh [version] [--skip-reobf]
 #
@@ -21,7 +21,7 @@ export MSYS2_ARG_CONV_EXCL='*'
 ROOT_WIN="$(cd "$(dirname "$0")" && pwd -W 2>/dev/null || pwd)"
 cd "$ROOT_WIN"
 
-VERSION="1.0.0"
+VERSION="1.0.2"
 SKIP_REOBF=0
 for arg in "$@"; do
   case "$arg" in

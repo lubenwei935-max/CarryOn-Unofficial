@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import tschipp.carryon.CarryOn;
+import tschipp.carryon.client.event.HotbarLockEvents;
 import tschipp.carryon.client.event.InventoryLockEvents;
 import tschipp.carryon.client.event.RenderEntityEvents;
 import tschipp.carryon.client.event.RenderEvents;
@@ -15,6 +16,7 @@ import tschipp.carryon.common.capabilities.PositionStorage;
 import tschipp.carryon.common.capabilities.TEPosition;
 import tschipp.carryon.common.capabilities.event.PositionClientEvents;
 import tschipp.carryon.common.capabilities.event.PositionCommonEvents;
+import tschipp.carryon.common.event.HotbarLockServer;
 import tschipp.carryon.common.event.ItemEntityEvents;
 import tschipp.carryon.common.event.ItemEvents;
 import tschipp.carryon.common.item.ItemEntity;
@@ -52,6 +54,11 @@ public class RegistrationHandler
 		MinecraftForge.EVENT_BUS.register(new ItemEvents());
 		MinecraftForge.EVENT_BUS.register(new ItemEntityEvents());
 		MinecraftForge.EVENT_BUS.register(new PositionCommonEvents());
+
+		// PlayerTickEvent 属于 TickEvent 家族，挂在 FML 总线而不是 Forge 总线。
+		// preInit 在客户端与服务端都会跑；类内部按 event.side 过滤，
+		// 单人游戏的内置服务端同样生效。
+		cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new HotbarLockServer());
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -64,8 +71,11 @@ public class RegistrationHandler
 		// 抱起东西时不许打开背包：GuiOpenEvent 挂在 Forge 总线
 		MinecraftForge.EVENT_BUS.register(new InventoryLockEvents());
 
-		// TickEvent 挂在 FML 总线，而渲染事件挂在 Forge 总线。
+		// TickEvent / InputEvent 挂在 FML 总线，而 MouseEvent / 渲染事件挂在 Forge 总线。
 		// 同一个类需要在两条总线上各注册一个实例（1.7.10 没有 @EventBusSubscriber）。
+		// HotbarLockEvents 无状态，两个实例各接收自己那条总线上的事件，互不重叠。
+		MinecraftForge.EVENT_BUS.register(new HotbarLockEvents());
+		cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new HotbarLockEvents());
 		cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new RenderEvents());
 		cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new PositionClientEvents());
 	}

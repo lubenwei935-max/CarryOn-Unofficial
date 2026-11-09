@@ -1,5 +1,33 @@
 # 更新日志
 
+## 1.0.2-hotbarlock（快捷栏锁定热修，未正式发版）
+
+**反馈**：抱起生物后可以切换快捷栏，切走后手上的生物消失、也放不下来。
+
+**根因**：搬运物是普通 `ItemStack`，放在 `inventory.currentItem` 那一格；
+`getMainhand()` 就是 `getStackInSlot(currentItem)`。`Minecraft.runTick()` 里
+`changeCurrentItem(dwheel)`（滚轮，偏移 536）和
+`currentItem = i`（数字键 `keyBindsHotbar[i].isPressed()`，偏移 1339）都没有被拦截，
+而原 `InventoryLockEvents` 也只看主手——切走一格后「不在搬运中」自动成立，
+背包、渲染、放下、减速、`CarrySlotPacket` 槽位同步全部连锁失效。
+
+**改动**（均在 `CarryOn-Unofficial/`，前置与版本号不变）：
+
+| 文件 | 内容 |
+|---|---|
+| `common/handler/CarryLock`（新） | 扫 9 格快捷栏 + Backhand 副手判定搬运中，返回应钉住的槽位 |
+| `client/event/HotbarLockEvents`（新） | ① `MouseEvent` 取消滚轮；② `KeyInputEvent` 预消费 `keyBindsHotbar` 的 `pressTime`；③ `ClientTickEvent` START/END 把 `currentItem` 钉回搬运格 |
+| `common/event/HotbarLockServer`（新） | `PlayerTickEvent`（`side == SERVER`）服务端兜底，防改包客户端 / 网络乱序 |
+| `client/event/InventoryLockEvents` | 改用 `CarryLock` 判定（不再只看主手）；客户端入口换 `FMLClientHandler.instance().getClient()` |
+| `common/handler/RegistrationHandler` | 新事件按 Forge / FML 两条总线分别注册 |
+| `common/config/Configs` | 新增 `lockHotbarWhileCarrying=true`（默认开启，双端需一致） |
+
+**验证**：`build.sh 1.0.2-hotbarlock` 编译 + 重混淆通过（46 个源文件，class major 52）；
+`verify.sh` 与 1.0.2 基线完全一致（7 条允许清单、2 条字段、零新增未映射引用）；
+新类的原版引用已全部改写为 srg；`tests/run_tests.sh` 113983 条断言 0 失败。
+交付 `CarryOn-Unoffcial-1.0.2-hotbarlock.jar`，**升级时删掉 mods 里的旧 jar**。
+游戏内实测（滚轮 / 数字键 / 中键 / 放下后解锁）仍需在本机完成。
+
 ## 1.0.2（前置 BackportAPI 1.1.0）
 
 **版本发布**：以 1.0.1 为基线，把下面三项通用兼容性修复（fix1 / fix2 / fix3）统一发布为 1.0.2。

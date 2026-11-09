@@ -72,6 +72,9 @@ public class Configs
 		@Config.Comment("Whether the player drops the carried object when hit or not")
 		public static boolean dropCarriedWhenHit = false;
 
+		@Config.Comment("Lock the selected hotbar slot while carrying (blocks mouse wheel, number keys and any other slot change). Set false to restore vanilla switching. Server and client should use the same value.")
+		public static boolean lockHotbarWhileCarrying = true;
+
 		@Config.Comment("Use custom Pickup Scripts. Having this set to false, will not allow you to run scripts, but will save you some performance")
 		public static boolean useScripts = false;
 

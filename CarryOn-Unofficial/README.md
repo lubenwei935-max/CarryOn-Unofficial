@@ -38,7 +38,8 @@
 
 空手（主手）**潜行 + 右键** 搬起方块或生物，松开潜行后再右键放下。
 
-- 搬运中无法攻击、挖掘、丢弃、切换物品栏、打开背包、打开容器
+- 搬运中无法攻击、挖掘、丢弃、**切换快捷栏**（滚轮 / 数字键 1–9 / 中键选块）、打开背包、打开容器
+  （开关 `B:lockHotbarWhileCarrying=true`，见下节）
 - 搬运物越重（NBT 越大 / 体型越大）移动越慢
 - 生物可以叠在别的生物背上
 
@@ -427,6 +428,63 @@ quark:custom_chest{type:"spruce"}->quark:custom_chest;0
 只拦背包，不拦箱子/工作台：搬运中右键已经被 `ItemEvents` 接管去"放下"了，
 而且背包能重排物品栏、把搬运物挪到别的格子，等于绕过"搬运中锁定快捷栏"。
 
+判定现在统一走 `CarryLock.isCarrying()`（扫整条 9 格快捷栏 + 副手），
+不再只看主手——原因见下一节。
+
+### 抱起时锁快捷栏
+
+**现象**：抱起生物（或方块）后滚轮 / 按 `1`–`9`，选中的格子照常切换。
+
+**根因**：搬运物就是一个普通 `ItemStack`，拾取时由 `Hands.setMainhand()` 写进
+`inventory.currentItem` 指向的那一格；而 `getMainhand()` 最终是
+`inventory.getStackInSlot(currentItem)`。所以 `currentItem` 一变：
+
+- `RenderEvents` / `RenderEntityEvents` 判定「不在搬运」→ 手上的东西凭空消失；
+- `ItemEvents.onBlockClick` / `ItemEntityEvents.onBlockClick` 的「放下」分支不再触发；
+- `ItemTile.onUpdate` 的减速、`onPlayerLogin` / `StartTracking` 发出的 `CarrySlotPacket`
+  拿到的槽位也全都是错的；
+- 更麻烦的是原本 `InventoryLockEvents` 也只看主手，**锁定条件自己就变成 false**，
+  背包随之解锁，搬运物可以被拖到别的格子。
+
+`Minecraft.runTick()`（forgebin.jar 反汇编，MCP 名）里改 `currentItem` 的地方只有两条，
+而原移植版一条都没拦：
+
+| 偏移 | 代码 | 输入 |
+|---|---|---|
+| 536 | `thePlayer.inventory.changeCurrentItem(Mouse.getEventDWheel())` | ① 滚轮 |
+| 1339 | `thePlayer.inventory.currentItem = i`（`keyBindsHotbar[i].isPressed()`） | ② 数字键 1–9 |
+
+另外中键选块、其它 mod 直接写字段也能改。对应的三层拦截在
+`client/event/HotbarLockEvents`：
+
+| 层 | 钩子 | 做法 |
+|---|---|---|
+| ① 滚轮 | `MouseEvent`（Forge 总线，`@Cancelable`） | `dwheel != 0` 且搬运中时 `setCanceled(true)`。`postMouseEvent()` 返回 true 后 `runTick()` 直接 `continue`，`changeCurrentItem` 整段不执行。**只取消滚轮事件**，左右键必须留给"放下"。 |
+| ② 数字键 | `InputEvent.KeyInputEvent`（FML 总线） | 1.7.10 没有可取消的按键事件。但 ② 用的是 `KeyBinding.isPressed()`，每调一次 `pressTime--`。在偏移 1298 的 `fireKeyInput()`（在 `onTick(685)` 之后、`1339` 之前）里把 9 个 `keyBindsHotbar` 的 `pressTime` 抽干，等原版去问时已经是 false。不能在 `ClientTickEvent START(89)` 里抽——那时按键还没处理、`pressTime` 还没加。 |
+| ③ 兜底 | `ClientTickEvent` START / END（FML 总线） | 把 `currentItem` 强行钉回 `CarryLock.findSlot()` 得到的槽位，覆盖中键选块 / 其它 mod / 任何遗漏路径。END 在偏移 2130，而渲染在 `runGameLoop()` 的 `runTick()` **之后**（偏移 324），所以画面上连一帧跳动都没有。 |
+
+`CarryLock`（`common/handler`）是唯一判定入口：`findSlot()` 扫 0..8 找带数据的
+`ItemTile` / `ItemEntity`，`isCarrying()` 额外照顾 Backhand 把搬运物换到副手的情况。
+扫背包而不是读「主手」或使用 `CarrySlotPacket` 写的 `carrySlot` NBT，是因为后者有
+网络延迟、还会在放下时被清成 9，不能作为本地权威状态。
+
+服务端还有一层 `common/event/HotbarLockServer`：在 `PlayerTickEvent`（FML 总线，
+`side == SERVER`，单人内置服务端同样生效）把 `EntityPlayerMP.inventory.currentItem`
+钉回搬运格。1.7.10 的选中槽位是客户端权威，服务端只从 `C09PacketHeldItemChange` 得知；
+这一层防止改过的客户端 / 网络包乱序造成「别人看你抱着、自己却放不下」。
+不发纠正包——原版没有这个包，硬发 `S2FPacketSetSlot` 反而和已锁定的客户端打架。
+
+配置项 `B:lockHotbarWhileCarrying=true`（`Settings` 分类，配置界面可直接改，
+**客户端与服务端需一致**）。设成 false 时三层拦截与服务端兜底一起停用，恢复原版切换。
+
+已知边界：装了 Backhand 并用其交换键把搬运物挪到**副手**时，快捷栏里没有可钉的槽位，
+状态兜底不会动作（输入层仍会拦住滚轮 / 数字键）；用交换键换回主手即可恢复。
+创造模式下滚轮同时调 `noclipRate`（飞行速度），取消滚轮事件时这一并跳过。
+
+**实测清单**：抱起一只生物 → 滚轮上下滚、按 `1`–`9`、中键点方块，
+选中框都应停在搬运物那一格且手上模型不消失；松开潜行右键应能正常放下；
+放下后三种切换立刻恢复；按 `E` 仍打不开背包。
+
 ---
 
 ## 移植时踩到的坑（1.7.10 特有）
@@ -565,6 +623,7 @@ export JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot"
    放下之后能正常打开。
 8. **第一人称没有手臂**：搬起体积小的方块（水晶箱、节点稳定器）时，屏幕右下角不应再出现手臂；
    放下后空手、手持普通物品时手臂都恢复正常（事件只在 `isCarried` 为真时取消）。
+9. **抱起时锁快捷栏**：按上节「实测清单」逐条验证滚轮 / 数字键 / 中键，以及放下后是否解锁。
 
 ---
 
@@ -572,6 +631,30 @@ export JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot"
 
 > 版本号按发布批次编号，不严格单调。1.0.4 / 1.0.5 是开发期的内部迭代号，已并入 1.0.1；
 > 当前发布版本为 **1.0.2**（前置仍为 BackportAPI **1.1.0**，与早期回撤的 1.0.2 / 前置 1.2.0 无关）。
+
+### 1.0.2-hotbarlock（快捷栏锁定热修，未正式发版）
+
+**修复**：抱起生物 / 方块时仍能切换快捷栏。根因、反汇编证据与三层拦截见
+[抱起时锁快捷栏](#抱起时锁快捷栏)。
+
+- 新增 `common/handler/CarryLock`：扫 9 格快捷栏（+ Backhand 副手）判定搬运中，
+  替代原先「只看主手」的判定——后者在切走槽位后会自己失效。
+- 新增 `client/event/HotbarLockEvents`：`MouseEvent` 取消滚轮、
+  `KeyInputEvent` 预消费 `keyBindsHotbar` 的 `pressTime`、
+  `ClientTickEvent` START/END 把 `currentItem` 钉回搬运格。
+- 新增 `common/event/HotbarLockServer`：`PlayerTickEvent`（`side == SERVER`）服务端兜底。
+- `InventoryLockEvents` 改用 `CarryLock`，并换用 `FMLClientHandler.instance().getClient()`
+  作为客户端入口；`RegistrationHandler` 在 Forge / FML 两条总线分别注册新事件。
+- `Configs.Settings` 新增 `lockHotbarWhileCarrying`（默认 true）；配置 GUI 自动出现该项，
+  首次启动会把默认值写进 `config/carryonunoffical.cfg`。
+- 前置、网络协议、`@Mod.version` / `mcmod.info` 都未改，仍为 1.0.2 / BackportAPI 1.1.0；
+  交付 jar 带后缀以区分基线：`CarryOn-Unoffcial-1.0.2-hotbarlock.jar`。
+  **升级时删掉 mods 目录里的旧 jar**（两个 jar 会重复注册，见 README 开头）。
+- 验证：`build.sh 1.0.2-hotbarlock` 全链路通过（46 个 java 文件，class major 52）；
+  `verify.sh` 与基线同为 7 条允许清单 + 2 条字段、零新增未映射引用；
+  新类引用已全部改写为 srg（`func_151468_f` / `field_151456_ac` / `field_70461_c` /
+  `func_70301_a` / `func_77973_b`）；`tests/run_tests.sh` 113983 条断言 0 失败。
+  游戏内实测仍需在本机完成。
 
 ### 1.0.2
 
